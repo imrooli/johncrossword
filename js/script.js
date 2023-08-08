@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
             puzzlePiece.addEventListener('mousedown', startDragging);
+            // Prevent accidental selection of images
+            puzzlePiece.addEventListener('dragstart', e => e.preventDefault());
         });
     }
 
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const shiftX = event.clientX - boundingRect.left - boundingRect.width / 2;
         const shiftY = event.clientY - boundingRect.top - boundingRect.height / 2;
 
-        puzzlePiece.style.position = 'absolute'; // Ensure puzzle piece is absolutely positioned
+        puzzlePiece.style.position = 'absolute';
         puzzlePiece.style.cursor = 'grabbing';
         puzzlePiece.style.zIndex = 1;
 
@@ -44,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', stopDragging);
     }
-
 
 
     // Add puzzle pieces to the board
