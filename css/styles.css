@@ -19,6 +19,4 @@ body {
 .puzzle-piece {
     cursor: pointer;
     user-select: none;
-    margin: 5px;
-    transition: transform 0.1s;
 }
