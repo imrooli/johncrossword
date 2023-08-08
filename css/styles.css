@@ -21,4 +21,5 @@ body {
     position: absolute;
     user-drag: none;
     user-select: none;
+    touch-action: none;
 }
