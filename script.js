@@ -46,9 +46,10 @@ function createPuzzlePieces() {
     board.appendChild(piece);
 
     // Add event listeners for dragging the puzzle pieces after creating them
-    piece.addEventListener("pointerdown", handleDragStart);
-    piece.addEventListener("pointerup", handleDragEnd);
-    piece.addEventListener("pointermove", handleDrag);
+    piece.addEventListener("mousedown", handleDragStart);
+    piece.addEventListener("touchstart", handleDragStart, { passive: false });
+    piece.addEventListener("mouseup", handleDragEnd);
+    piece.addEventListener("touchend", handleDragEnd);
   });
 }
 
@@ -57,16 +58,26 @@ let offsetX = 0;
 let offsetY = 0;
 
 function handleDragStart(event) {
-  draggedPiece = event.target;
-  offsetX = event.clientX - draggedPiece.getBoundingClientRect().left;
-  offsetY = event.clientY - draggedPiece.getBoundingClientRect().top;
-  draggedPiece.style.cursor = "grabbing";
+  if (event.type === "mousedown") {
+    draggedPiece = event.target;
+    offsetX = event.clientX - draggedPiece.getBoundingClientRect().left;
+    offsetY = event.clientY - draggedPiece.getBoundingClientRect().top;
+    draggedPiece.style.cursor = "grabbing";
+  } else if (event.type === "touchstart") {
+    draggedPiece = event.target;
+    offsetX = event.touches[0].clientX - draggedPiece.getBoundingClientRect().left;
+    offsetY = event.touches[0].clientY - draggedPiece.getBoundingClientRect().top;
+    draggedPiece.style.cursor = "grabbing";
+  }
 }
 
 function handleDragEnd(event) {
   draggedPiece = null;
   event.target.style.cursor = "grab";
 }
+
+document.addEventListener("mousemove", handleDrag);
+document.addEventListener("touchmove", handleDrag, { passive: false });
 
 function handleDrag(event) {
   if (draggedPiece) {
@@ -78,8 +89,15 @@ function handleDrag(event) {
     const maxX = boardRect.width - draggedPiece.offsetWidth;
     const maxY = boardRect.height - draggedPiece.offsetHeight;
 
-    let x = event.clientX - boardRect.left - offsetX;
-    let y = event.clientY - boardRect.top - offsetY;
+    let x, y;
+
+    if (event.type === "mousemove") {
+      x = event.clientX - boardRect.left - offsetX;
+      y = event.clientY - boardRect.top - offsetY;
+    } else if (event.type === "touchmove") {
+      x = event.touches[0].clientX - boardRect.left - offsetX;
+      y = event.touches[0].clientY - boardRect.top - offsetY;
+    }
 
     x = Math.min(Math.max(minX, x), maxX);
     y = Math.min(Math.max(minY, y), maxY);
