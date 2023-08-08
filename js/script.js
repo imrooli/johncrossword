@@ -11,33 +11,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.addEventListener('touchstart', startDragging);
-            puzzlePiece.addEventListener('touchmove', continueDragging);
-            puzzlePiece.addEventListener('touchend', stopDragging);
-            puzzlePiece.addEventListener('touchcancel', stopDragging);
+            puzzlePiece.onclick = startDragging;
         });
+        document.onmousemove = continueDragging;
+        document.onmouseup = stopDragging;
     }
 
     let draggingPiece = null;
-    let touchOffsetX = 0;
-    let touchOffsetY = 0;
+    let offsetX = 0;
+    let offsetY = 0;
 
     function startDragging(event) {
         draggingPiece = event.target;
         const puzzlePieceRect = draggingPiece.getBoundingClientRect();
-        const touch = event.touches[0];
-        touchOffsetX = touch.clientX - puzzlePieceRect.left;
-        touchOffsetY = touch.clientY - puzzlePieceRect.top;
+        offsetX = event.clientX - puzzlePieceRect.left;
+        offsetY = event.clientY - puzzlePieceRect.top;
         draggingPiece.style.cursor = 'grabbing';
         draggingPiece.style.zIndex = 1;
     }
 
     function continueDragging(event) {
         if (!draggingPiece) return;
-        event.preventDefault();
-        const touch = event.touches[0];
-        const newX = touch.clientX - touchOffsetX;
-        const newY = touch.clientY - touchOffsetY;
+        const newX = event.clientX - offsetX;
+        const newY = event.clientY - offsetY;
         draggingPiece.style.left = newX + 'px';
         draggingPiece.style.top = newY + 'px';
     }
