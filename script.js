@@ -33,46 +33,45 @@ function createPuzzlePieces() {
   puzzlePieceUrls.forEach((url, index) => {
     const piece = document.createElement("div");
     piece.className = "puzzle-piece";
-    piece.setAttribute("draggable", "true");
     piece.style.backgroundImage = `url(${url})`;
     piece.style.left = Math.random() * 500 + "px"; // Random initial position
     piece.style.top = Math.random() * 300 + "px";
+
+    // Add event listeners for dragging the puzzle piece
+    piece.addEventListener("mousedown", handleDragStart);
+    piece.addEventListener("mouseup", handleDragEnd);
 
     board.appendChild(piece);
   });
 }
 
+let draggedPiece = null;
+let offsetX = 0;
+let offsetY = 0;
+
+function handleDragStart(event) {
+  draggedPiece = event.target;
+  offsetX = event.clientX - parseFloat(draggedPiece.style.left);
+  offsetY = event.clientY - parseFloat(draggedPiece.style.top);
+  draggedPiece.style.cursor = "grabbing";
+}
+
+function handleDragEnd(event) {
+  draggedPiece = null;
+  event.target.style.cursor = "grab";
+}
+
+document.addEventListener("mousemove", handleDrag);
+
+function handleDrag(event) {
+  if (draggedPiece) {
+    draggedPiece.style.left = event.clientX - offsetX + "px";
+    draggedPiece.style.top = event.clientY - offsetY + "px";
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   createPuzzlePieces();
-
-  const puzzlePieces = document.querySelectorAll(".puzzle-piece");
-
-  let draggedPiece = null;
-
-  puzzlePieces.forEach(piece => {
-    piece.addEventListener("dragstart", handleDragStart);
-    piece.addEventListener("dragend", handleDragEnd);
-  });
-
-  function handleDragStart(event) {
-    draggedPiece = event.target;
-    event.dataTransfer.setData("text/plain", ""); // Required for Firefox to enable dragging
-  }
-
-  function handleDragEnd(event) {
-    draggedPiece = null;
-  }
-
-  document.addEventListener("dragover", event => event.preventDefault());
-
-  document.addEventListener("drop", event => {
-    event.preventDefault();
-    if (draggedPiece) {
-      const rect = event.target.getBoundingClientRect();
-      const offsetX = event.clientX - rect.left;
-      const offsetY = event.clientY - rect.top;
-      draggedPiece.style.left = offsetX - draggedPiece.offsetWidth / 2 + "px";
-      draggedPiece.style.top = offsetY - draggedPiece.offsetHeight / 2 + "px";
-    }
+});
   });
 });
