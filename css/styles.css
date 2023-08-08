@@ -1,30 +1,25 @@
 body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    text-align: center;
+    font-family: Arial, sans-serif;
 }
 
-#puzzle-container {
-  width: 400px; /* Adjust the container size as needed */
-  height: 400px; /* Adjust the container size as needed */
-  border: 2px solid black; /* Optional border to visualize the container */
-  position: relative;
+#puzzle-board {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 600px; /* Adjust the size of the puzzle board */
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    padding: 10px;
 }
 
-img.puzzle-piece {
-  width: auto;
-  height: auto;
-  max-width: 100px; /* Set the maximum width of the puzzle pieces */
-  max-height: 100px; /* Set the maximum height of the puzzle pieces */
-  position: absolute;
-  transform: translate(0, 0); /* Reset the initial transform to (0, 0) */
-  transition: transform 0.2s ease; /* Add a smooth transition for better dragging experience */
+.puzzle-piece {
+    cursor: grab;
+    margin: 5px;
 }
 
-img.puzzle-piece.dragging {
-  /* Add any visual effect you want while dragging, e.g., drop shadow */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+.puzzle-piece img {
+    width: 100%;
+    height: auto;
+    user-drag: none;
+    user-select: none;
 }
