@@ -27,11 +27,6 @@ const puzzlePieceUrls = [
   // Add other image links here for the remaining puzzle pieces
 ];
 
-const puzzlePieceUrls = [
-  "https://i.imgur.com/4oYIM2J.png",
-  // Add other image links here for the remaining puzzle pieces
-];
-
 async function getImageDimensions(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -80,7 +75,6 @@ async function createPuzzlePieces() {
       piece.style.backgroundImage = `url("${url}")`; // Use the background-image property
       piece.style.width = `${scaledWidth}px`;
       piece.style.height = `${scaledHeight}px`;
-      piece.style.backgroundSize = "contain"; // Set background size to contain the image
       piece.style.left = leftPosition + "px";
       piece.style.top = Math.random() * (board.offsetHeight - scaledHeight) + "px";
 
