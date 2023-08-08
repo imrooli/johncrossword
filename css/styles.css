@@ -3,18 +3,28 @@ body {
     font-family: Arial, sans-serif;
 }
 
+#puzzle-holder {
+    width: 200px; /* Adjust the size of the puzzle holder */
+    height: 100vh; /* Adjust the height of the puzzle holder */
+    border: 2px solid #ccc;
+    padding: 10px;
+    background-color: #f0f0f0;
+    float: left;
+    box-sizing: border-box;
+}
+
 #puzzle-board {
-    display: grid; /* Use grid layout */
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adjust as needed */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     grid-gap: 10px;
-    max-width: 800px; /* Adjust the size of the puzzle board */
-    height: 80vh; /* Adjust the height of the puzzle board */
+    max-width: calc(100% - 220px); /* Adjust to fit the remaining space */
+    height: 100vh;
     margin: 0 auto;
     border: 2px solid #ccc;
     padding: 10px;
     background-color: #f0f0f0;
+    box-sizing: border-box;
 }
-
 
 .puzzle-piece {
     cursor: grab;
