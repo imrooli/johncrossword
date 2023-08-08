@@ -34,9 +34,13 @@ function loadPuzzlePieces() {
     shuffleArray(puzzlePieces);
 
     puzzlePieces.forEach((piece, index) => {
-        const puzzlePiece = document.createElement("img");
-        puzzlePiece.src = "images/puzzle_pieces/" + piece;
-        puzzlePiece.className = "puzzle-piece";
+        const puzzlePiece = document.createElement("div");
+        puzzlePiece.classList.add("puzzle-piece");
+        puzzlePiece.style.backgroundImage = `url('images/puzzle_pieces/${piece}')`;
+        puzzlePiece.style.backgroundSize = "cover";
+        puzzlePiece.style.backgroundRepeat = "no-repeat";
+        puzzlePiece.style.width = "100px"; // Adjust to your puzzle piece width
+        puzzlePiece.style.height = "100px"; // Adjust to your puzzle piece height
         puzzlePiece.style.zIndex = index + 1;
         puzzlePiece.addEventListener("mousedown", dragStart);
         puzzleContainer.appendChild(puzzlePiece);
@@ -54,17 +58,24 @@ function shuffleArray(array) {
 // Function to handle dragging puzzle pieces
 function dragStart(event) {
     const puzzlePiece = event.target;
-    const puzzleBoard = document.getElementById("puzzleBoard");
     puzzlePiece.style.zIndex = 999; // Bring the piece to the top during dragging
-    puzzlePiece.style.position = "absolute";
+
+    const puzzleContainer = document.getElementById("puzzleContainer");
+    const containerRect = puzzleContainer.getBoundingClientRect();
+
+    const offsetX = event.clientX - containerRect.left - puzzlePiece.offsetWidth / 2;
+    const offsetY = event.clientY - containerRect.top - puzzlePiece.offsetHeight / 2;
 
     function onMouseMove(e) {
-        const puzzleContainerRect = puzzleBoard.getBoundingClientRect();
-        const offsetX = e.clientX - puzzleContainerRect.left - puzzlePiece.width / 2;
-        const offsetY = e.clientY - puzzleContainerRect.top - puzzlePiece.height / 2;
+        let left = e.clientX - containerRect.left - offsetX;
+        let top = e.clientY - containerRect.top - offsetY;
 
-        puzzlePiece.style.left = offsetX + "px";
-        puzzlePiece.style.top = offsetY + "px";
+        // Ensure the puzzle piece remains within the puzzle container
+        left = Math.max(0, Math.min(left, puzzleContainer.clientWidth - puzzlePiece.offsetWidth));
+        top = Math.max(0, Math.min(top, puzzleContainer.clientHeight - puzzlePiece.offsetHeight));
+
+        puzzlePiece.style.left = left + "px";
+        puzzlePiece.style.top = top + "px";
     }
 
     function onMouseUp() {
@@ -75,7 +86,6 @@ function dragStart(event) {
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
 }
-
 
 // Call the loadPuzzlePieces function when the page is loaded
 window.addEventListener("load", loadPuzzlePieces);
