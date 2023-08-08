@@ -15,25 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function startDragging(event) {
+   function startDragging(event) {
     const puzzlePiece = event.target.closest('.puzzle-piece');
     const boundingRect = puzzlePiece.getBoundingClientRect();
-    const shiftX = event.clientX - boundingRect.left;
-    const shiftY = event.clientY - boundingRect.top;
+
+    const offsetX = event.clientX - boundingRect.left;
+    const offsetY = event.clientY - boundingRect.top;
 
     puzzlePiece.style.cursor = 'grabbing';
     puzzlePiece.style.zIndex = 1;
 
-    function moveAt(pageX, pageY) {
-        const newX = pageX - shiftX;
-        const newY = pageY - shiftY;
+    function onMouseMove(event) {
+        const newX = event.clientX - offsetX;
+        const newY = event.clientY - offsetY;
 
         puzzlePiece.style.left = newX + 'px';
         puzzlePiece.style.top = newY + 'px';
-    }
-
-    function onMouseMove(event) {
-        moveAt(event.pageX, event.pageY);
     }
 
     function stopDragging() {
