@@ -17,6 +17,12 @@ body {
 }
 
 .puzzle-piece {
-    cursor: pointer;
+    cursor: grab;
+    position: relative;
+    margin: 5px;
+}
+
+.puzzle-piece img {
+    user-drag: none;
     user-select: none;
 }
