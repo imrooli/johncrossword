@@ -27,30 +27,53 @@ const puzzlePieceUrls = [
   // Add other image links here for the remaining puzzle pieces
 ];
 
-function createPuzzlePieces() {
+const puzzlePieceUrls = [
+  "https://i.imgur.com/4oYIM2J.png",
+  // Add other image links here for the remaining puzzle pieces
+];
+
+async function getImageDimensions(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      resolve({ width: img.width, height: img.height });
+    };
+    img.onerror = (error) => {
+      reject(error);
+    };
+    img.src = url;
+  });
+}
+
+async function createPuzzlePieces() {
   const board = document.getElementById("puzzle-board");
-  const boardWidth = board.offsetWidth;
 
   // Clear the puzzle board before creating new pieces
   board.innerHTML = "";
 
-  const uniqueUrls = new Set(puzzlePieceUrls); // Convert array to a set to remove duplicates
+  for (const url of puzzlePieceUrls) {
+    try {
+      const { width, height } = await getImageDimensions(url);
 
-  uniqueUrls.forEach((url) => {
-    const piece = document.createElement("div");
-    piece.className = "puzzle-piece";
-    piece.style.backgroundImage = `url("${url}")`; // Use the background-image property
-    piece.style.left = Math.random() * (boardWidth - piece.offsetWidth) + "px"; // Random initial position
-    piece.style.top = Math.random() * (boardWidth - piece.offsetWidth) + "px";
+      const piece = document.createElement("div");
+      piece.className = "puzzle-piece";
+      piece.style.backgroundImage = `url("${url}")`; // Use the background-image property
+      piece.style.width = `${width}px`;
+      piece.style.height = `${height}px`;
+      piece.style.left = Math.random() * (board.offsetWidth - width) + "px"; // Random initial position
+      piece.style.top = Math.random() * (board.offsetHeight - height) + "px";
 
-    board.appendChild(piece);
+      board.appendChild(piece);
 
-    // Add event listeners for dragging the puzzle pieces after creating them
-    piece.addEventListener("mousedown", handleDragStart);
-    piece.addEventListener("touchstart", handleDragStart, { passive: false });
-    piece.addEventListener("mouseup", handleDragEnd);
-    piece.addEventListener("touchend", handleDragEnd);
-  });
+      // Add event listeners for dragging the puzzle pieces after creating them
+      piece.addEventListener("mousedown", handleDragStart);
+      piece.addEventListener("touchstart", handleDragStart, { passive: false });
+      piece.addEventListener("mouseup", handleDragEnd);
+      piece.addEventListener("touchend", handleDragEnd);
+    } catch (error) {
+      console.error(`Error loading image from ${url}:`, error);
+    }
+  }
 }
 
 let draggedPiece = null;
