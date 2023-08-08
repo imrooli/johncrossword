@@ -15,7 +15,16 @@ body {
 }
 
 img.puzzle-piece {
-  width: 100px; /* Adjust the puzzle piece size as needed */
-  height: 100px; /* Adjust the puzzle piece size as needed */
+  width: auto;
+  height: auto;
+  max-width: 100px; /* Set the maximum width of the puzzle pieces */
+  max-height: 100px; /* Set the maximum height of the puzzle pieces */
   position: absolute;
+  transform: translate(0, 0); /* Reset the initial transform to (0, 0) */
+  transition: transform 0.2s ease; /* Add a smooth transition for better dragging experience */
+}
+
+img.puzzle-piece.dragging {
+  /* Add any visual effect you want while dragging, e.g., drop shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
