@@ -4,7 +4,7 @@ body {
     overflow: hidden;
 }
 
-#puzzleContainer {
+#puzzleBoard {
     position: relative;
     width: 600px; /* Adjust to your desired width */
     height: 400px; /* Adjust to your desired height */
@@ -12,13 +12,14 @@ body {
     margin: 20px auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
 }
 
 .puzzle-piece {
     position: relative;
-    flex: 0 0 calc(33.333% - 10px);
-    height: 100px; /* Adjust to your desired puzzle piece height */
-    margin-bottom: 10px;
+    width: 33.33%; /* Adjust the puzzle piece width to 33.33% to fit 3 pieces in a row */
+    padding-top: 33.33%; /* Maintain the aspect ratio (1:1) for the puzzle pieces */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     cursor: grab;
 }
