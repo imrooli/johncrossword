@@ -39,12 +39,13 @@ function createPuzzlePieces() {
   uniqueUrls.forEach((url) => {
     const piece = document.createElement("div");
     piece.className = "puzzle-piece";
+    piece.style.backgroundImage = `url("${url}")`; // Use the background-image property
     piece.style.left = Math.random() * (boardWidth - piece.offsetWidth) + "px"; // Random initial position
     piece.style.top = Math.random() * (boardWidth - piece.offsetWidth) + "px";
 
     board.appendChild(piece);
 
-        // Add event listeners for dragging the puzzle pieces after creating them
+    // Add event listeners for dragging the puzzle pieces after creating them
     piece.addEventListener("mousedown", handleDragStart);
     piece.addEventListener("touchstart", handleDragStart, { passive: false });
     piece.addEventListener("mouseup", handleDragEnd);
