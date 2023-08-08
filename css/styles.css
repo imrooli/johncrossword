@@ -4,7 +4,7 @@ body {
     overflow: hidden;
 }
 
-#puzzleBoard {
+#puzzleContainer {
     position: relative;
     width: 600px; /* Adjust to your desired width */
     height: 400px; /* Adjust to your desired height */
@@ -12,10 +12,7 @@ body {
     margin: 20px auto;
 }
 
-#puzzlePiecesContainer {
-    position: relative;
-    width: 100%;
-    height: 100px; /* Adjust to your desired height */
-    background-color: #ddd; /* Change this to your desired background color */
-    margin: 20px auto;
+.puzzle-piece {
+    position: absolute;
+    cursor: grab;
 }
