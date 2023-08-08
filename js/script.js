@@ -11,28 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.addEventListener('mousedown', startDragging);
+            puzzlePiece.draggable = true;
+            puzzlePiece.addEventListener('dragstart', startDragging);
+            puzzlePiece.addEventListener('dragend', stopDragging);
         });
-        document.addEventListener('mousemove', continueDragging);
-        document.addEventListener('mouseup', stopDragging);
     }
 
     let draggingPiece = null;
-    let offsetX = 0;
-    let offsetY = 0;
 
     function startDragging(event) {
         draggingPiece = event.target;
-        offsetX = event.clientX - parseFloat(getComputedStyle(draggingPiece).left);
-        offsetY = event.clientY - parseFloat(getComputedStyle(draggingPiece).top);
+        event.dataTransfer.setData('text/plain', ''); // Required for dragging in Firefox
         draggingPiece.style.cursor = 'grabbing';
         draggingPiece.style.zIndex = 1;
-    }
-
-    function continueDragging(event) {
-        if (!draggingPiece) return;
-        draggingPiece.style.left = (event.clientX - offsetX) + 'px';
-        draggingPiece.style.top = (event.clientY - offsetY) + 'px';
     }
 
     function stopDragging() {
@@ -46,17 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 1; i <= 24; i++) {
         const puzzlePiece = document.createElement('div');
         puzzlePiece.classList.add('puzzle-piece');
-        const puzzleImage = new Image();
-        puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
-        puzzleImage.onload = () => {
-            const originalWidth = puzzleImage.width;
-            const originalHeight = puzzleImage.height;
-            puzzlePiece.style.width = originalWidth + 'px';
-            puzzlePiece.style.height = originalHeight + 'px';
-            puzzlePiece.style.left = Math.random() * (puzzleBoard.offsetWidth - originalWidth) + 'px';
-            puzzlePiece.style.top = Math.random() * (puzzleBoard.offsetHeight - originalHeight) + 'px';
-        };
-        puzzlePiece.appendChild(puzzleImage);
+        puzzlePiece.style.backgroundImage = `url(images/puzzle_pieces/puzzle_${i}.png)`;
+        puzzlePiece.style.backgroundSize = 'contain';
         puzzleBoard.appendChild(puzzlePiece);
         puzzlePieces.push(puzzlePiece);
     }
