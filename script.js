@@ -36,8 +36,15 @@ function allowDrop(event) {
 
 function drag(event) {
   const draggedImage = event.target;
-  offsetX = event.clientX - draggedImage.getBoundingClientRect().left;
-  offsetY = event.clientY - draggedImage.getBoundingClientRect().top;
+  const isTouchEvent = event.type === "touchstart";
+
+  offsetX = isTouchEvent
+    ? event.touches[0].clientX - draggedImage.getBoundingClientRect().left
+    : event.clientX - draggedImage.getBoundingClientRect().left;
+  offsetY = isTouchEvent
+    ? event.touches[0].clientY - draggedImage.getBoundingClientRect().top
+    : event.clientY - draggedImage.getBoundingClientRect().top;
+
   draggedImage.style.cursor = "grabbing";
   draggedPiece = draggedImage;
 }
@@ -95,6 +102,7 @@ async function createPuzzlePieces() {
       piece.style.top = Math.random() * (board.offsetHeight - scaledHeight) + "px";
       piece.draggable = true;
       piece.addEventListener("dragstart", drag);
+      piece.addEventListener("touchstart", drag);
 
       board.appendChild(piece);
 
