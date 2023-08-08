@@ -10,9 +10,15 @@ body {
     height: 400px; /* Adjust to your desired height */
     background-color: #f0f0f0; /* Change this to your desired background color */
     margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .puzzle-piece {
-    position: absolute;
+    position: relative;
+    flex: 0 0 calc(33.333% - 10px);
+    height: 100px; /* Adjust to your desired puzzle piece height */
+    margin-bottom: 10px;
     cursor: grab;
 }
