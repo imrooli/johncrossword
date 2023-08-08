@@ -11,34 +11,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.addEventListener('mousedown', startDragging);
+            puzzlePiece.addEventListener('touchstart', startDragging);
+            puzzlePiece.addEventListener('touchmove', continueDragging);
+            puzzlePiece.addEventListener('touchend', stopDragging);
+            puzzlePiece.addEventListener('touchcancel', stopDragging);
         });
     }
 
+    let draggingPiece = null;
+    let touchOffsetX = 0;
+    let touchOffsetY = 0;
+
     function startDragging(event) {
-        const puzzlePiece = event.target;
-        const puzzlePieceRect = puzzlePiece.getBoundingClientRect();
+        draggingPiece = event.target;
+        const puzzlePieceRect = draggingPiece.getBoundingClientRect();
+        const touch = event.touches[0];
+        touchOffsetX = touch.clientX - puzzlePieceRect.left;
+        touchOffsetY = touch.clientY - puzzlePieceRect.top;
+        draggingPiece.style.cursor = 'grabbing';
+        draggingPiece.style.zIndex = 1;
+    }
 
-        const offsetX = event.clientX - puzzlePieceRect.left;
-        const offsetY = event.clientY - puzzlePieceRect.top;
+    function continueDragging(event) {
+        if (!draggingPiece) return;
+        event.preventDefault();
+        const touch = event.touches[0];
+        const newX = touch.clientX - touchOffsetX;
+        const newY = touch.clientY - touchOffsetY;
+        draggingPiece.style.left = newX + 'px';
+        draggingPiece.style.top = newY + 'px';
+    }
 
-        puzzlePiece.style.cursor = 'grabbing';
-        puzzlePiece.style.zIndex = 1;
-
-        function onMouseMove(event) {
-            puzzlePiece.style.left = event.clientX - offsetX + 'px';
-            puzzlePiece.style.top = event.clientY - offsetY + 'px';
-        }
-
-        function stopDragging() {
-            document.removeEventListener('mousemove', onMouseMove);
-            puzzlePiece.style.cursor = 'grab';
-            puzzlePiece.style.zIndex = 0;
-            document.removeEventListener('mouseup', stopDragging);
-        }
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', stopDragging);
+    function stopDragging() {
+        if (!draggingPiece) return;
+        draggingPiece.style.cursor = 'grab';
+        draggingPiece.style.zIndex = 0;
+        draggingPiece = null;
     }
 
     // Add puzzle pieces to the board
