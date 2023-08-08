@@ -26,9 +26,13 @@ const puzzlePieces = [
     "puzzle_24.png"
 ];
 
-// Function to load the puzzle pieces onto the page
+// Function to load the puzzle pieces onto the page in random order
 function loadPuzzlePieces() {
     const puzzleContainer = document.getElementById("puzzleContainer");
+
+    // Randomize the order of the puzzle pieces array
+    shuffleArray(puzzlePieces);
+
     puzzlePieces.forEach((piece, index) => {
         const puzzlePiece = document.createElement("img");
         puzzlePiece.src = "images/puzzle_pieces/" + piece;
@@ -39,15 +43,36 @@ function loadPuzzlePieces() {
     });
 }
 
+// Function to shuffle an array (Fisher-Yates algorithm)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 // Function to handle dragging puzzle pieces
 function dragStart(event) {
     const puzzlePiece = event.target;
     puzzlePiece.style.zIndex = 999; // Bring the piece to the top during dragging
     puzzlePiece.style.position = "absolute";
 
+    const puzzleContainer = document.getElementById("puzzleContainer");
+    const containerRect = puzzleContainer.getBoundingClientRect();
+
+    const offsetLeft = event.clientX - containerRect.left - puzzlePiece.width / 2;
+    const offsetTop = event.clientY - containerRect.top - puzzlePiece.height / 2;
+
     function onMouseMove(e) {
-        puzzlePiece.style.left = e.pageX - puzzlePiece.width / 2 + "px";
-        puzzlePiece.style.top = e.pageY - puzzlePiece.height / 2 + "px";
+        let left = e.clientX - containerRect.left - offsetLeft;
+        let top = e.clientY - containerRect.top - offsetTop;
+
+        // Ensure the puzzle piece remains within the puzzle container
+        left = Math.max(0, Math.min(left, puzzleContainer.clientWidth - puzzlePiece.width));
+        top = Math.max(0, Math.min(top, puzzleContainer.clientHeight - puzzlePiece.height));
+
+        puzzlePiece.style.left = left + "px";
+        puzzlePiece.style.top = top + "px";
     }
 
     function onMouseUp() {
