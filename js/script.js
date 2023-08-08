@@ -11,39 +11,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.addEventListener("pointerdown", handleDragStart);
-            puzzlePiece.addEventListener("pointerup", handleDragEnd);
-            puzzlePiece.addEventListener("pointermove", handleDrag);
+            puzzlePiece.addEventListener('pointerdown', startDragging);
         });
     }
 
-    function handleDragStart(event) {
+    function startDragging(event) {
         const puzzlePiece = event.target.closest('.puzzle-piece');
-        puzzlePiece.style.cursor = 'grabbing';
-        puzzlePiece.style.zIndex = 1;
-        puzzlePiece.setPointerCapture(event.pointerId);
-    }
-
-    function handleDrag(event) {
-        const puzzlePiece = event.target.closest('.puzzle-piece');
-        if (!puzzlePiece.hasPointerCapture(event.pointerId)) return;
-
         const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left;
         const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top;
+
+        puzzlePiece.style.cursor = 'grabbing';
+        puzzlePiece.style.zIndex = 1;
 
         function moveAt(pageX, pageY) {
             puzzlePiece.style.left = pageX - shiftX + 'px';
             puzzlePiece.style.top = pageY - shiftY + 'px';
         }
 
-        moveAt(event.pageX, event.pageY);
-    }
+        function onMouseMove(event) {
+            moveAt(event.pageX, event.pageY);
+        }
 
-    function handleDragEnd(event) {
-        const puzzlePiece = event.target.closest('.puzzle-piece');
-        puzzlePiece.style.cursor = 'grab';
-        puzzlePiece.style.zIndex = 0;
-        puzzlePiece.releasePointerCapture(event.pointerId);
+        function stopDragging() {
+            document.removeEventListener('pointermove', onMouseMove);
+            puzzlePiece.style.cursor = 'grab';
+            puzzlePiece.style.zIndex = 0;
+            document.removeEventListener('pointerup', stopDragging);
+        }
+
+        document.addEventListener('pointermove', onMouseMove);
+        document.addEventListener('pointerup', stopDragging);
     }
 
     // Add puzzle pieces to the board
