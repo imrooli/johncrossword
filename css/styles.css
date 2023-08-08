@@ -19,7 +19,7 @@ body {
 .puzzle-piece {
     cursor: grab;
     position: relative;
-    margin: 5px;
+    margin: 0px;
 }
 
 .puzzle-piece img {
