@@ -11,38 +11,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.addEventListener('pointerdown', startDragging);
+            puzzlePiece.addEventListener('mousedown', startDragging);
+            puzzlePiece.addEventListener('mouseup', stopDragging);
         });
     }
 
     function startDragging(event) {
-        const puzzlePiece = event.target.closest('.puzzle-piece');
-        const initialX = event.clientX;
-        const initialY = event.clientY;
-        const puzzlePieceRect = puzzlePiece.getBoundingClientRect();
-        const offsetX = initialX - puzzlePieceRect.left;
-        const offsetY = initialY - puzzlePieceRect.top;
-
+        const puzzlePiece = event.target;
         puzzlePiece.style.cursor = 'grabbing';
         puzzlePiece.style.zIndex = 1;
 
-        function onMouseMove(event) {
-            const newX = event.clientX - offsetX;
-            const newY = event.clientY - offsetY;
+        const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left;
+        const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top;
 
-            puzzlePiece.style.left = newX + 'px';
-            puzzlePiece.style.top = newY + 'px';
+        function onMouseMove(event) {
+            puzzlePiece.style.left = event.clientX - shiftX + 'px';
+            puzzlePiece.style.top = event.clientY - shiftY + 'px';
         }
+
+        document.addEventListener('mousemove', onMouseMove);
 
         function stopDragging() {
-            document.removeEventListener('pointermove', onMouseMove);
+            document.removeEventListener('mousemove', onMouseMove);
             puzzlePiece.style.cursor = 'grab';
             puzzlePiece.style.zIndex = 0;
-            document.removeEventListener('pointerup', stopDragging);
         }
 
-        document.addEventListener('pointermove', onMouseMove);
-        document.addEventListener('pointerup', stopDragging);
+        puzzlePiece.addEventListener('mouseup', stopDragging);
     }
 
     // Add puzzle pieces to the board
@@ -56,13 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalHeight = puzzleImage.height;
             puzzlePiece.style.width = originalWidth + 'px';
             puzzlePiece.style.height = originalHeight + 'px';
+            puzzlePiece.style.left = Math.random() * (puzzleBoard.offsetWidth - originalWidth) + 'px';
+            puzzlePiece.style.top = Math.random() * (puzzleBoard.offsetHeight - originalHeight) + 'px';
         };
         puzzlePiece.appendChild(puzzleImage);
-        puzzlePiece.dataset.target = `target_${i}`;
         puzzleBoard.appendChild(puzzlePiece);
         puzzlePieces.push(puzzlePiece);
     }
 
-    shuffleArray(puzzlePieces);
     addEventListenersToPieces();
 });
