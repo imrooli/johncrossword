@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const puzzleHolder = document.getElementById('puzzle-holder');
     const puzzleBoard = document.getElementById('puzzle-board');
     const puzzlePieces = [];
 
@@ -67,9 +68,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Shuffle the order of puzzle pieces
     shuffleArray(puzzlePieces);
 
+// Append the shuffled pieces to the holder initially
+    puzzlePieces.forEach(puzzlePiece => puzzleHolder.appendChild(puzzlePiece));
+
     // Add event listeners to pieces
     addEventListenersToPieces();
 
-    // Append the shuffled pieces to the board using CSS Grid
-    puzzlePieces.forEach(puzzlePiece => puzzleBoard.appendChild(puzzlePiece));
+    // Register drop event for the puzzle holder
+    puzzleHolder.addEventListener('drop', event => {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const puzzlePiece = document.getElementById(data);
+        puzzleHolder.appendChild(puzzlePiece);
+    });
+
+    puzzleHolder.addEventListener('dragover', event => {
+        event.preventDefault();
+    });
 });
