@@ -34,26 +34,21 @@ function loadPuzzlePieces() {
     shuffleArray(puzzlePieces);
 
     puzzlePieces.forEach((piece, index) => {
-        const puzzlePiece = createPuzzlePiece(piece, index);
+        const puzzlePiece = document.createElement("div");
+        puzzlePiece.classList.add("puzzle-piece");
+        puzzlePiece.style.backgroundImage = `url('images/puzzle_pieces/${piece}')`;
+        puzzlePiece.style.backgroundSize = "cover";
+        puzzlePiece.style.backgroundRepeat = "no-repeat";
+        puzzlePiece.style.width = "100px"; // Adjust to your puzzle piece width
+        puzzlePiece.style.height = "100px"; // Adjust to your puzzle piece height
+        puzzlePiece.style.zIndex = index + 1;
         puzzleContainer.appendChild(puzzlePiece);
-    });
-}
 
-// Function to create a puzzle piece element
-function createPuzzlePiece(piece, index) {
-    const puzzlePiece = document.createElement("div");
-    puzzlePiece.classList.add("puzzle-piece");
-    puzzlePiece.style.backgroundImage = `url('images/puzzle_pieces/${piece}')`;
-    puzzlePiece.style.backgroundSize = "cover";
-    puzzlePiece.style.backgroundRepeat = "no-repeat";
-    puzzlePiece.style.width = "100px"; // Adjust to your puzzle piece width
-    puzzlePiece.style.height = "100px"; // Adjust to your puzzle piece height
-    puzzlePiece.style.zIndex = index + 1;
-    puzzlePiece.setAttribute("draggable", "true");
-    puzzlePiece.addEventListener("dragstart", dragStart);
-    puzzlePiece.addEventListener("dragover", dragOver);
-    puzzlePiece.addEventListener("drop", drop);
-    return puzzlePiece;
+        // Register drag event listeners for the puzzle pieces
+        puzzlePiece.addEventListener("mousedown", dragStart);
+        puzzlePiece.addEventListener("mousemove", dragMove);
+        puzzlePiece.addEventListener("mouseup", dragEnd);
+    });
 }
 
 // Function to shuffle an array (Fisher-Yates algorithm)
@@ -65,33 +60,39 @@ function shuffleArray(array) {
 }
 
 // Function to handle dragging puzzle pieces
-let draggedPiece;
+let isDragging = false;
+let puzzlePiece;
 
 function dragStart(event) {
-    draggedPiece = event.target;
+    isDragging = true;
+    puzzlePiece = event.target;
+    puzzlePiece.style.zIndex = 999; // Bring the piece to the top during dragging
+    puzzlePiece.style.cursor = "grabbing";
 }
 
-function dragOver(event) {
-    event.preventDefault();
+function dragMove(event) {
+    if (isDragging) {
+        const puzzleContainer = document.getElementById("puzzleContainer");
+        const containerRect = puzzleContainer.getBoundingClientRect();
+
+        const offsetX = event.clientX - containerRect.left - puzzlePiece.offsetWidth / 2;
+        const offsetY = event.clientY - containerRect.top - puzzlePiece.offsetHeight / 2;
+
+        let left = offsetX;
+        let top = offsetY;
+
+        // Ensure the puzzle piece remains within the puzzle container
+        left = Math.max(0, Math.min(left, puzzleContainer.clientWidth - puzzlePiece.offsetWidth));
+        top = Math.max(0, Math.min(top, puzzleContainer.clientHeight - puzzlePiece.offsetHeight));
+
+        puzzlePiece.style.left = left + "px";
+        puzzlePiece.style.top = top + "px";
+    }
 }
 
-function drop(event) {
-    event.preventDefault();
-    const puzzleContainer = document.getElementById("puzzleContainer");
-    const containerRect = puzzleContainer.getBoundingClientRect();
-
-    const offsetX = event.clientX - containerRect.left - draggedPiece.offsetWidth / 2;
-    const offsetY = event.clientY - containerRect.top - draggedPiece.offsetHeight / 2;
-
-    let left = offsetX;
-    let top = offsetY;
-
-    // Ensure the puzzle piece remains within the puzzle container
-    left = Math.max(0, Math.min(left, puzzleContainer.clientWidth - draggedPiece.offsetWidth));
-    top = Math.max(0, Math.min(top, puzzleContainer.clientHeight - draggedPiece.offsetHeight));
-
-    draggedPiece.style.left = left + "px";
-    draggedPiece.style.top = top + "px";
+function dragEnd() {
+    isDragging = false;
+    puzzlePiece.style.cursor = "grab";
 }
 
 // Call the loadPuzzlePieces function when the page is loaded
