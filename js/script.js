@@ -17,8 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
    function startDragging(event) {
     const puzzlePiece = event.target.closest('.puzzle-piece');
-    const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left - puzzlePiece.offsetWidth / 2;
-    const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top - puzzlePiece.offsetHeight / 2;
+    const offsetX = puzzlePiece.offsetWidth / 2; // Calculate the offset from the center
+    const offsetY = puzzlePiece.offsetHeight / 2;
+
+    const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left - offsetX;
+    const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top - offsetY;
 
     console.log("ShiftX:", shiftX);
     console.log("ShiftY:", shiftY);
@@ -47,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', stopDragging);
 }
+
 
 
 
