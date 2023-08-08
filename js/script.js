@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 1; i <= 24; i++) {
         const puzzlePiece = document.createElement('div');
         puzzlePiece.classList.add('puzzle-piece');
-        const puzzleImage = document.createElement('img');
+        const puzzleImage = new Image();
         puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
         puzzlePiece.appendChild(puzzleImage);
         puzzleBoard.appendChild(puzzlePiece);
