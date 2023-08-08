@@ -34,17 +34,26 @@ function loadPuzzlePieces() {
     shuffleArray(puzzlePieces);
 
     puzzlePieces.forEach((piece, index) => {
-        const puzzlePiece = document.createElement("div");
-        puzzlePiece.classList.add("puzzle-piece");
-        puzzlePiece.style.backgroundImage = `url('images/puzzle_pieces/${piece}')`;
-        puzzlePiece.style.backgroundSize = "cover";
-        puzzlePiece.style.backgroundRepeat = "no-repeat";
-        puzzlePiece.style.width = "100px"; // Adjust to your puzzle piece width
-        puzzlePiece.style.height = "100px"; // Adjust to your puzzle piece height
-        puzzlePiece.style.zIndex = index + 1;
-        puzzlePiece.addEventListener("mousedown", dragStart);
+        const puzzlePiece = createPuzzlePiece(piece, index);
         puzzleContainer.appendChild(puzzlePiece);
     });
+}
+
+// Function to create a puzzle piece element
+function createPuzzlePiece(piece, index) {
+    const puzzlePiece = document.createElement("div");
+    puzzlePiece.classList.add("puzzle-piece");
+    puzzlePiece.style.backgroundImage = `url('images/puzzle_pieces/${piece}')`;
+    puzzlePiece.style.backgroundSize = "cover";
+    puzzlePiece.style.backgroundRepeat = "no-repeat";
+    puzzlePiece.style.width = "100px"; // Adjust to your puzzle piece width
+    puzzlePiece.style.height = "100px"; // Adjust to your puzzle piece height
+    puzzlePiece.style.zIndex = index + 1;
+    puzzlePiece.setAttribute("draggable", "true");
+    puzzlePiece.addEventListener("dragstart", dragStart);
+    puzzlePiece.addEventListener("dragover", dragOver);
+    puzzlePiece.addEventListener("drop", drop);
+    return puzzlePiece;
 }
 
 // Function to shuffle an array (Fisher-Yates algorithm)
@@ -56,35 +65,33 @@ function shuffleArray(array) {
 }
 
 // Function to handle dragging puzzle pieces
-function dragStart(event) {
-    const puzzlePiece = event.target;
-    puzzlePiece.style.zIndex = 999; // Bring the piece to the top during dragging
+let draggedPiece;
 
+function dragStart(event) {
+    draggedPiece = event.target;
+}
+
+function dragOver(event) {
+    event.preventDefault();
+}
+
+function drop(event) {
+    event.preventDefault();
     const puzzleContainer = document.getElementById("puzzleContainer");
     const containerRect = puzzleContainer.getBoundingClientRect();
 
-    const offsetX = event.clientX - containerRect.left - puzzlePiece.offsetWidth / 2;
-    const offsetY = event.clientY - containerRect.top - puzzlePiece.offsetHeight / 2;
+    const offsetX = event.clientX - containerRect.left - draggedPiece.offsetWidth / 2;
+    const offsetY = event.clientY - containerRect.top - draggedPiece.offsetHeight / 2;
 
-    function onMouseMove(e) {
-        let left = e.clientX - containerRect.left - offsetX;
-        let top = e.clientY - containerRect.top - offsetY;
+    let left = offsetX;
+    let top = offsetY;
 
-        // Ensure the puzzle piece remains within the puzzle container
-        left = Math.max(0, Math.min(left, puzzleContainer.clientWidth - puzzlePiece.offsetWidth));
-        top = Math.max(0, Math.min(top, puzzleContainer.clientHeight - puzzlePiece.offsetHeight));
+    // Ensure the puzzle piece remains within the puzzle container
+    left = Math.max(0, Math.min(left, puzzleContainer.clientWidth - draggedPiece.offsetWidth));
+    top = Math.max(0, Math.min(top, puzzleContainer.clientHeight - draggedPiece.offsetHeight));
 
-        puzzlePiece.style.left = left + "px";
-        puzzlePiece.style.top = top + "px";
-    }
-
-    function onMouseUp() {
-        window.removeEventListener("mousemove", onMouseMove);
-        window.removeEventListener("mouseup", onMouseUp);
-    }
-
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
+    draggedPiece.style.left = left + "px";
+    draggedPiece.style.top = top + "px";
 }
 
 // Call the loadPuzzlePieces function when the page is loaded
