@@ -2,58 +2,56 @@ document.addEventListener('DOMContentLoaded', () => {
     const puzzleBoard = document.getElementById('puzzle-board');
     const puzzlePieces = [];
 
-    function allowDrop(event) {
-        event.preventDefault();
+function startDragging(event) {
+    const puzzlePiece = event.target.closest('.puzzle-piece');
+    const boundingRect = puzzlePiece.getBoundingClientRect();
+    const shiftX = event.clientX - boundingRect.left;
+    const shiftY = event.clientY - boundingRect.top;
+
+    puzzlePiece.style.cursor = 'grabbing';
+    puzzlePiece.style.zIndex = 1;
+
+    function moveAt(pageX, pageY) {
+        const newX = pageX - shiftX;
+        const newY = pageY - shiftY;
+
+        puzzlePiece.style.left = newX + 'px';
+        puzzlePiece.style.top = newY + 'px';
     }
 
-    let offsetX = 0;
-    let offsetY = 0;
-    let draggedPiece = null;
-
-    function drag(event) {
-        const draggedImage = event.target;
-        offsetX = event.clientX - draggedImage.getBoundingClientRect().left;
-        offsetY = event.clientY - draggedImage.getBoundingClientRect().top;
-        draggedImage.style.cursor = "grabbing";
-        draggedPiece = draggedImage;
+    function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
     }
 
-    function drop(event) {
-        event.preventDefault();
-        if (draggedPiece) {
-            const x = event.clientX - puzzleBoard.getBoundingClientRect().left - offsetX;
-            const y = event.clientY - puzzleBoard.getBoundingClientRect().top - offsetY;
-            draggedPiece.style.left = `${x}px`;
-            draggedPiece.style.top = `${y}px`;
-            draggedPiece.style.cursor = "grab";
-            draggedPiece = null;
-        }
+    function stopDragging() {
+        document.removeEventListener('mousemove', onMouseMove);
+        puzzlePiece.style.cursor = 'grab';
+        puzzlePiece.style.zIndex = 0;
+        document.removeEventListener('mouseup', stopDragging);
     }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', stopDragging);
+}
 
     // Add puzzle pieces to the board
     for (let i = 1; i <= 24; i++) {
         const puzzlePiece = document.createElement('div');
         puzzlePiece.classList.add('puzzle-piece');
-        puzzlePiece.draggable = true;
-        puzzlePiece.addEventListener('dragstart', drag);
-        puzzlePiece.addEventListener('dragend', () => {
-            if (draggedPiece) {
-                draggedPiece.style.cursor = "grab";
-                draggedPiece = null;
-            }
-        });
         const puzzleImage = new Image();
         puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
         puzzleImage.onload = () => {
             const originalWidth = puzzleImage.width;
             const originalHeight = puzzleImage.height;
-            puzzlePiece.style.backgroundImage = `url(${puzzleImage.src})`;
-            puzzlePiece.style.backgroundSize = 'cover';
             puzzlePiece.style.width = originalWidth + 'px';
             puzzlePiece.style.height = originalHeight + 'px';
         };
         puzzlePiece.appendChild(puzzleImage);
+        puzzlePiece.dataset.target = `target_${i}`;
         puzzleBoard.appendChild(puzzlePiece);
         puzzlePieces.push(puzzlePiece);
     }
+
+    shuffleArray(puzzlePieces);
+    addEventListenersToPieces();
 });
