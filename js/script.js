@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
             puzzlePiece.addEventListener('mousedown', startDragging);
-            puzzlePiece.addEventListener('dragstart', () => false);
         });
     }
 
@@ -39,8 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
             puzzlePiece.style.zIndex = 0;
             checkPuzzleCompletion();
         }
-
-        moveAt(event.pageX, event.pageY);
 
         document.addEventListener('mousemove', onMouseMove);
         puzzlePiece.addEventListener('mouseup', onMouseUp);
