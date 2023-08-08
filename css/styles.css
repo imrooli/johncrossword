@@ -4,22 +4,15 @@ body {
     overflow: hidden;
 }
 
-#puzzleBoard {
+#puzzleContainer {
     position: relative;
     width: 600px; /* Adjust to your desired width */
     height: 400px; /* Adjust to your desired height */
     background-color: #f0f0f0; /* Change this to your desired background color */
     margin: 20px auto;
-    display: flex;
-    flex-wrap: wrap;
 }
 
 .puzzle-piece {
-    position: relative;
-    width: 33.33%; /* Adjust the puzzle piece width to 33.33% to fit 3 pieces in a row */
-    padding-top: 33.33%; /* Maintain the aspect ratio (1:1) for the puzzle pieces */
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    position: absolute;
     cursor: grab;
 }
