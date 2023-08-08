@@ -5,6 +5,17 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleDragStart(e) {
     e.dataTransfer.setData("text/plain", e.target.id);
     e.dataTransfer.dropEffect = "move";
+
+    // Add a class to apply a drop shadow or any other visual effect while dragging
+    e.target.classList.add("dragging");
+  }
+
+  function handleDragEnd(e) {
+    // Remove the dragging class when the dragging ends
+    const draggedPiece = document.querySelector(".dragging");
+    if (draggedPiece) {
+      draggedPiece.classList.remove("dragging");
+    }
   }
 
   function handleDragOver(e) {
@@ -16,22 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const draggedPieceId = e.dataTransfer.getData("text/plain");
     const draggedPiece = document.getElementById(draggedPieceId);
-    const offsetX = e.clientX - draggedPiece.dataset.clientX;
-    const offsetY = e.clientY - draggedPiece.dataset.clientY;
-    draggedPiece.style.left = `${offsetX}px`;
-    draggedPiece.style.top = `${offsetY}px`;
-    updatePuzzlePositions();
-  }
-
-  // Function to update the puzzle piece positions
-  function updatePuzzlePositions() {
-    const puzzlePieces = document.getElementsByClassName("puzzle-piece");
-    for (let i = 0; i < puzzlePieces.length; i++) {
-      const piece = puzzlePieces[i];
-      const rect = piece.getBoundingClientRect();
-      piece.dataset.clientX = rect.left;
-      piece.dataset.clientY = rect.top;
-    }
+    const offsetX = e.clientX - parseInt(draggedPiece.dataset.offsetX);
+    const offsetY = e.clientY - parseInt(draggedPiece.dataset.offsetY);
+    draggedPiece.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
   }
 
   // Load 24 puzzle pieces onto the page
@@ -41,10 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
     puzzlePiece.id = `puzzle-${i}`;
     puzzlePiece.classList.add("puzzle-piece");
     puzzlePiece.style.position = "absolute";
-    puzzlePiece.style.left = "0";
-    puzzlePiece.style.top = "0";
 
     puzzlePiece.addEventListener("dragstart", handleDragStart);
+    puzzlePiece.addEventListener("dragend", handleDragEnd);
     puzzleContainer.appendChild(puzzlePiece);
   }
 
