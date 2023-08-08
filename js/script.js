@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-   function startDragging(event) {
+  function startDragging(event) {
     const puzzlePiece = event.target.closest('.puzzle-piece');
     const boundingRect = puzzlePiece.getBoundingClientRect();
 
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', stopDragging);
 }
+
 
 
     // Add puzzle pieces to the board
