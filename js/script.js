@@ -17,18 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startDragging(event) {
         const puzzlePiece = event.target;
-        const initialX = event.clientX - puzzlePiece.getBoundingClientRect().left;
-        const initialY = event.clientY - puzzlePiece.getBoundingClientRect().top;
+        const puzzlePieceRect = puzzlePiece.getBoundingClientRect();
+
+        const offsetX = event.clientX - puzzlePieceRect.left;
+        const offsetY = event.clientY - puzzlePieceRect.top;
 
         puzzlePiece.style.cursor = 'grabbing';
         puzzlePiece.style.zIndex = 1;
 
         function onMouseMove(event) {
-            const newX = event.clientX - initialX;
-            const newY = event.clientY - initialY;
-
-            puzzlePiece.style.left = newX + 'px';
-            puzzlePiece.style.top = newY + 'px';
+            puzzlePiece.style.left = event.clientX - offsetX + 'px';
+            puzzlePiece.style.top = event.clientY - offsetY + 'px';
         }
 
         function stopDragging() {
