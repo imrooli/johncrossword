@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const puzzlePieces = document.querySelectorAll('.puzzle-piece');
+    const puzzleBoard = document.getElementById('puzzle-board');
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -9,13 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addEventListenersToPieces() {
+        const puzzlePieces = document.querySelectorAll('.puzzle-piece');
         puzzlePieces.forEach(puzzlePiece => {
             puzzlePiece.addEventListener('mousedown', startDragging);
         });
     }
 
     function startDragging(event) {
-        const puzzlePiece = event.target;
+        const puzzlePiece = event.target.closest('.puzzle-piece');
         puzzlePiece.style.cursor = 'grabbing';
         puzzlePiece.style.zIndex = 1;
         const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left;
@@ -43,10 +44,16 @@ document.addEventListener('DOMContentLoaded', () => {
         puzzlePiece.addEventListener('mouseup', onMouseUp);
     }
 
-    // Shuffle the puzzle pieces and add them to the board
-    shuffleArray(puzzlePieces);
-    const puzzleBoard = document.getElementById('puzzle-board');
-    puzzlePieces.forEach(puzzlePiece => puzzleBoard.appendChild(puzzlePiece));
+    // Add puzzle pieces to the board
+    for (let i = 1; i <= 24; i++) {
+        const puzzlePiece = document.createElement('div');
+        puzzlePiece.classList.add('puzzle-piece');
+        const puzzleImage = document.createElement('img');
+        puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
+        puzzlePiece.appendChild(puzzleImage);
+        puzzleBoard.appendChild(puzzlePiece);
+    }
 
+    shuffleArray(puzzleBoard.children);
     addEventListenersToPieces();
 });
