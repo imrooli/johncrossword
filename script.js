@@ -29,6 +29,7 @@ const puzzlePieceUrls = [
 
 function createPuzzlePieces() {
   const board = document.getElementById("puzzle-board");
+  const boardWidth = board.offsetWidth;
 
   // Clear the puzzle board before creating new pieces
   board.innerHTML = "";
@@ -39,8 +40,8 @@ function createPuzzlePieces() {
     const piece = document.createElement("div");
     piece.className = "puzzle-piece";
     piece.style.backgroundImage = `url("${url}")`; // Use the background-image property
-    piece.style.left = Math.random() * 500 + "px"; // Random initial position
-    piece.style.top = Math.random() * 300 + "px";
+    piece.style.left = Math.random() * (boardWidth - piece.offsetWidth) + "px"; // Random initial position
+    piece.style.top = Math.random() * (boardWidth - piece.offsetWidth) + "px";
 
     board.appendChild(piece);
 
@@ -69,10 +70,26 @@ function handleDragEnd(event) {
 
 function handleDrag(event) {
   if (draggedPiece) {
-    draggedPiece.style.left = event.clientX - offsetX + "px";
-    draggedPiece.style.top = event.clientY - offsetY + "px";
+    const board = document.getElementById("puzzle-board");
+    const boardRect = board.getBoundingClientRect();
+
+    const minX = 0;
+    const minY = 0;
+    const maxX = boardRect.width - draggedPiece.offsetWidth;
+    const maxY = boardRect.height - draggedPiece.offsetHeight;
+
+    let x = event.clientX - boardRect.left - offsetX;
+    let y = event.clientY - boardRect.top - offsetY;
+
+    x = Math.min(Math.max(minX, x), maxX);
+    y = Math.min(Math.max(minY, y), maxY);
+
+    draggedPiece.style.left = x + "px";
+    draggedPiece.style.top = y + "px";
   }
 }
+
+window.addEventListener("resize", createPuzzlePieces);
 
 document.addEventListener("DOMContentLoaded", () => {
   createPuzzlePieces();
