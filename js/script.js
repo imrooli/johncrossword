@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
     }
 
+    let offsetX = 0;
+    let offsetY = 0;
+    let draggedPiece = null;
+
     function drag(event) {
         const draggedImage = event.target;
         offsetX = event.clientX - draggedImage.getBoundingClientRect().left;
@@ -30,10 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 1; i <= 24; i++) {
         const puzzlePiece = document.createElement('div');
         puzzlePiece.classList.add('puzzle-piece');
+        puzzlePiece.draggable = true;
+        puzzlePiece.addEventListener('dragstart', drag);
+        puzzlePiece.addEventListener('dragend', () => {
+            if (draggedPiece) {
+                draggedPiece.style.cursor = "grab";
+                draggedPiece = null;
+            }
+        });
         const puzzleImage = new Image();
         puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
-        puzzleImage.draggable = true;
-        puzzleImage.addEventListener('dragstart', drag);
         puzzleImage.onload = () => {
             const originalWidth = puzzleImage.width;
             const originalHeight = puzzleImage.height;
