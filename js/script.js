@@ -34,25 +34,25 @@ function loadPuzzlePieces() {
     shuffleArray(puzzlePieces);
 
     puzzlePieces.forEach((piece, index) => {
-        const puzzlePiece = document.createElement("div");
-        puzzlePiece.classList.add("puzzle-piece");
-        puzzlePiece.style.backgroundImage = `url('images/puzzle_pieces/${piece}')`;
-        puzzlePiece.style.backgroundSize = "cover";
-        puzzlePiece.style.backgroundRepeat = "no-repeat";
-        puzzlePiece.style.width = "100px"; // Adjust to your puzzle piece width
-        puzzlePiece.style.height = "100px"; // Adjust to your puzzle piece height
-        puzzlePiece.style.zIndex = index + 1;
+        const puzzlePiece = createPuzzlePiece(piece, index);
         puzzleContainer.appendChild(puzzlePiece);
     });
+}
 
-    // Register drag event listeners for the puzzle pieces
-    const puzzlePiecesElements = document.querySelectorAll(".puzzle-piece");
-    puzzlePiecesElements.forEach(puzzlePiece => {
-        puzzlePiece.addEventListener("mousedown", dragStart);
-    });
-
-    document.addEventListener("mousemove", dragMove);
-    document.addEventListener("mouseup", dragEnd);
+// Function to create a puzzle piece element
+function createPuzzlePiece(piece, index) {
+    const puzzlePiece = document.createElement("div");
+    puzzlePiece.classList.add("puzzle-piece");
+    puzzlePiece.style.backgroundImage = `url('images/puzzle_pieces/${piece}')`;
+    puzzlePiece.style.backgroundSize = "cover";
+    puzzlePiece.style.backgroundPosition = "center";
+    puzzlePiece.style.backgroundRepeat = "no-repeat";
+    puzzlePiece.style.zIndex = index + 1;
+    puzzlePiece.setAttribute("draggable", "true");
+    puzzlePiece.addEventListener("dragstart", dragStart);
+    puzzlePiece.addEventListener("dragover", dragOver);
+    puzzlePiece.addEventListener("drop", drop);
+    return puzzlePiece;
 }
 
 // Function to shuffle an array (Fisher-Yates algorithm)
@@ -94,9 +94,12 @@ function dragMove(event) {
     }
 }
 
-function dragEnd() {
-    isDragging = false;
-    puzzlePiece.style.cursor = "grab";
+function dragOver(event) {
+    event.preventDefault();
+}
+
+function drop(event) {
+    event.preventDefault();
 }
 
 // Call the loadPuzzlePieces function when the page is loaded
