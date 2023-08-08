@@ -5,13 +5,14 @@
   padding-bottom: 66.66%; /* Aspect ratio: 3:2 (height = width * 2/3) */
   border: 2px solid #000;
   position: relative;
+  overflow: hidden; /* Ensure puzzle pieces stay within the board */
 }
 
 .puzzle-piece {
   width: 25%; /* Adjust the piece size to your preference */
-  height: 0;
-  padding-bottom: 25%; /* Aspect ratio: 1:1 (height = width) */
+  height: auto;
   position: absolute;
   cursor: grab;
   background-size: cover;
 }
+
