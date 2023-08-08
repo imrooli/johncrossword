@@ -30,6 +30,9 @@ const puzzlePieceUrls = [
 function createPuzzlePieces() {
   const board = document.getElementById("puzzle-board");
 
+  // Clear the puzzle board before creating new pieces
+  board.innerHTML = "";
+
   puzzlePieceUrls.forEach((url, index) => {
     const piece = document.createElement("div");
     piece.className = "puzzle-piece";
@@ -38,11 +41,8 @@ function createPuzzlePieces() {
     piece.style.top = Math.random() * 300 + "px";
 
     board.appendChild(piece);
-  });
 
-  // Add event listeners for dragging the puzzle pieces after creating them
-  const puzzlePieces = document.querySelectorAll(".puzzle-piece");
-  puzzlePieces.forEach((piece) => {
+    // Add event listeners for dragging the puzzle pieces after creating them
     piece.addEventListener("pointerdown", handleDragStart);
     piece.addEventListener("pointerup", handleDragEnd);
     piece.addEventListener("pointermove", handleDrag);
