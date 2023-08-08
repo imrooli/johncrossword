@@ -48,8 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // Add puzzle pieces to the board
-    for (let i = 1; i <= 24; i++) {
+ for (let i = 1; i <= 24; i++) {
         const puzzlePiece = document.createElement('div');
         puzzlePiece.classList.add('puzzle-piece');
         const puzzleImage = new Image();
@@ -62,14 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         puzzlePiece.appendChild(puzzleImage);
         puzzlePiece.dataset.target = `target_${i}`;
-        puzzleBoard.appendChild(puzzlePiece);
         puzzlePieces.push(puzzlePiece);
     }
 
     // Shuffle the order of puzzle pieces
     shuffleArray(puzzlePieces);
-    // Append the shuffled pieces back to the board
-    puzzlePieces.forEach(puzzlePiece => puzzleBoard.appendChild(puzzlePiece));
 
+    // Add event listeners to pieces
     addEventListenersToPieces();
+
+    // Append the shuffled pieces to the board using CSS Grid
+    puzzlePieces.forEach(puzzlePiece => puzzleBoard.appendChild(puzzlePiece));
 });
