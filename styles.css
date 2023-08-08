@@ -9,10 +9,8 @@
 }
 
 .puzzle-piece {
-  width: 25%; /* Adjust the piece size to your preference */
-  height: auto;
   position: absolute;
   cursor: grab;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
-
