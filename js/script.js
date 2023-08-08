@@ -15,15 +15,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function startDragging(event) {
+   function startDragging(event) {
     const puzzlePiece = event.target.closest('.puzzle-piece');
     const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left - puzzlePiece.offsetWidth / 2;
     const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top - puzzlePiece.offsetHeight / 2;
+
+    console.log("ShiftX:", shiftX);
+    console.log("ShiftY:", shiftY);
 
     puzzlePiece.style.cursor = 'grabbing';
     puzzlePiece.style.zIndex = 1;
 
     function moveAt(pageX, pageY) {
+        console.log("MoveAt X:", pageX - shiftX);
+        console.log("MoveAt Y:", pageY - shiftY);
         puzzlePiece.style.left = pageX - shiftX + 'px';
         puzzlePiece.style.top = pageY - shiftY + 'px';
     }
@@ -42,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', stopDragging);
 }
+
 
 
     // Add puzzle pieces to the board
