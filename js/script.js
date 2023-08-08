@@ -21,12 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
         puzzlePiece.style.cursor = 'grabbing';
         puzzlePiece.style.zIndex = 1;
 
-        const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left;
-        const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top;
-
         function onMouseMove(event) {
-            puzzlePiece.style.left = event.clientX - shiftX + 'px';
-            puzzlePiece.style.top = event.clientY - shiftY + 'px';
+            puzzlePiece.style.left = event.clientX - puzzlePiece.offsetWidth / 2 + 'px';
+            puzzlePiece.style.top = event.clientY - puzzlePiece.offsetHeight / 2 + 'px';
         }
 
         document.addEventListener('mousemove', onMouseMove);
