@@ -1,18 +1,21 @@
 body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-#puzzleContainer {
-    position: relative;
-    width: 600px; /* Adjust to your desired width */
-    height: 400px; /* Adjust to your desired height */
-    background-color: #f0f0f0; /* Change this to your desired background color */
-    margin: 20px auto;
+#puzzle-container {
+  width: 400px; /* Adjust the container size as needed */
+  height: 400px; /* Adjust the container size as needed */
+  border: 2px solid black; /* Optional border to visualize the container */
+  position: relative;
 }
 
-.puzzle-piece {
-    position: absolute;
-    cursor: grab;
+img.puzzle-piece {
+  width: 100px; /* Adjust the puzzle piece size as needed */
+  height: 100px; /* Adjust the puzzle piece size as needed */
+  position: absolute;
 }
