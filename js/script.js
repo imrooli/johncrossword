@@ -15,29 +15,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function startDragging(event) {
-        const puzzlePiece = event.target.closest('.puzzle-piece');
-        const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left;
-        const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top;
+function startDragging(event) {
+    const puzzlePiece = event.target.closest('.puzzle-piece');
+    
+    const offsetX = event.clientX - puzzlePiece.getBoundingClientRect().left;
+    const offsetY = event.clientY - puzzlePiece.getBoundingClientRect().top;
 
-        puzzlePiece.style.cursor = 'grabbing';
-        puzzlePiece.style.zIndex = 1;
+    puzzlePiece.style.cursor = 'grabbing';
+    puzzlePiece.style.zIndex = 1;
 
-        function moveAt(pageX, pageY) {
-            puzzlePiece.style.left = pageX - shiftX + 'px';
-            puzzlePiece.style.top = pageY - shiftY + 'px';
-        }
+    function moveAt(pageX, pageY) {
+        const left = pageX - offsetX;
+        const top = pageY - offsetY;
+        puzzlePiece.style.left = left + 'px';
+        puzzlePiece.style.top = top + 'px';
+    }
 
-        function onMouseMove(event) {
-            moveAt(event.pageX, event.pageY);
-        }
+    function onMouseMove(event) {
+        moveAt(event.clientX, event.clientY);
+    }
 
-        function stopDragging() {
-            document.removeEventListener('mousemove', onMouseMove);
-            puzzlePiece.style.cursor = 'grab';
-            puzzlePiece.style.zIndex = 0;
-            document.removeEventListener('mouseup', stopDragging);
-        }
+    function stopDragging() {
+        document.removeEventListener('mousemove', onMouseMove);
+        puzzlePiece.style.cursor = 'grab';
+        puzzlePiece.style.zIndex = 0;
+        document.removeEventListener('mouseup', stopDragging);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', stopDragging);
+}
+
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', stopDragging);
