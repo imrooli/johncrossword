@@ -18,11 +18,7 @@ body {
 
 .puzzle-piece {
     cursor: grab;
-    position: relative;
-    margin: 5px;
-}
-
-.puzzle-piece img {
+    position: absolute;
     user-drag: none;
     user-select: none;
 }
