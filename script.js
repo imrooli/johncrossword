@@ -51,8 +51,8 @@ let offsetY = 0;
 
 function handleDragStart(event) {
   draggedPiece = event.target;
-  offsetX = event.clientX - parseFloat(draggedPiece.style.left);
-  offsetY = event.clientY - parseFloat(draggedPiece.style.top);
+  offsetX = event.clientX - draggedPiece.getBoundingClientRect().left;
+  offsetY = event.clientY - draggedPiece.getBoundingClientRect().top;
   draggedPiece.style.cursor = "grabbing";
 }
 
@@ -72,6 +72,4 @@ function handleDrag(event) {
 
 document.addEventListener("DOMContentLoaded", () => {
   createPuzzlePieces();
-});
-  });
 });
