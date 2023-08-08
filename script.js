@@ -27,11 +27,6 @@ const puzzlePieceUrls = [
   // Add other image links here for the remaining puzzle pieces
 ];
 
-const puzzlePieceUrls = [
-  "https://i.imgur.com/4oYIM2J.png",
-  // Add other image links here for the remaining puzzle pieces
-];
-
 async function getImageDimensions(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
