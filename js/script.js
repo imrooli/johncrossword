@@ -43,12 +43,16 @@ function loadPuzzlePieces() {
         puzzlePiece.style.height = "100px"; // Adjust to your puzzle piece height
         puzzlePiece.style.zIndex = index + 1;
         puzzleContainer.appendChild(puzzlePiece);
-
-        // Register drag event listeners for the puzzle pieces
-        puzzlePiece.addEventListener("mousedown", dragStart);
-        puzzlePiece.addEventListener("mousemove", dragMove);
-        puzzlePiece.addEventListener("mouseup", dragEnd);
     });
+
+    // Register drag event listeners for the puzzle pieces
+    const puzzlePiecesElements = document.querySelectorAll(".puzzle-piece");
+    puzzlePiecesElements.forEach(puzzlePiece => {
+        puzzlePiece.addEventListener("mousedown", dragStart);
+    });
+
+    document.addEventListener("mousemove", dragMove);
+    document.addEventListener("mouseup", dragEnd);
 }
 
 // Function to shuffle an array (Fisher-Yates algorithm)
