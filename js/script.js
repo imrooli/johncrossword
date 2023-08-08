@@ -17,10 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startDragging(event) {
         const puzzlePiece = event.target.closest('.puzzle-piece');
-        puzzlePiece.style.cursor = 'grabbing';
-        puzzlePiece.style.zIndex = 1;
         const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left;
         const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top;
+
+        puzzlePiece.style.cursor = 'grabbing';
+        puzzlePiece.style.zIndex = 1;
 
         function moveAt(pageX, pageY) {
             puzzlePiece.style.left = pageX - shiftX + 'px';
@@ -33,14 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function onMouseUp() {
             document.removeEventListener('mousemove', onMouseMove);
-            puzzlePiece.removeEventListener('mouseup', onMouseUp);
+            document.removeEventListener('mouseup', onMouseUp);
             puzzlePiece.style.cursor = 'grab';
             puzzlePiece.style.zIndex = 0;
             checkPuzzleCompletion();
         }
 
+        moveAt(event.pageX, event.pageY);
+
         document.addEventListener('mousemove', onMouseMove);
-        puzzlePiece.addEventListener('mouseup', onMouseUp);
+        document.addEventListener('mouseup', onMouseUp);
     }
 
     function checkPuzzleCompletion() {
