@@ -73,13 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
         puzzlePiece.classList.add('puzzle-piece');
         const puzzleImage = new Image();
         puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
+        puzzleImage.onload = () => {
+            puzzlePiece.style.width = puzzleImage.width + 'px';
+            puzzlePiece.style.height = puzzleImage.height + 'px';
+        };
         puzzlePiece.appendChild(puzzleImage);
         puzzlePiece.style.order = i;
         puzzlePiece.dataset.target = `target_${i}`;
         puzzleBoard.appendChild(puzzlePiece);
-        puzzlePieces.push(puzzlePiece);
-    }
-
-    shuffleArray(puzzlePieces);
-    addEventListenersToPieces();
-});
