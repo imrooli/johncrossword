@@ -9,8 +9,5 @@
 }
 
 .puzzle-piece {
-  position: absolute;
   cursor: grab;
-  background-size: contain;
-  background-repeat: no-repeat;
 }
