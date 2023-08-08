@@ -9,16 +9,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function shufflePiecesPositions() {
-        puzzlePieces.forEach(puzzlePiece => {
-            const maxX = puzzleBoard.offsetWidth - puzzlePiece.offsetWidth;
-            const maxY = puzzleBoard.offsetHeight - puzzlePiece.offsetHeight;
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-            puzzlePiece.style.left = `${randomX}px`;
-            puzzlePiece.style.top = `${randomY}px`;
-        });
-    }
+function shufflePiecesPositions() {
+    puzzlePieces.forEach(puzzlePiece => {
+        const maxX = puzzleBoard.offsetWidth - puzzlePiece.offsetWidth;
+        const maxY = puzzleBoard.offsetHeight - puzzlePiece.offsetHeight;
+        
+        // Adjust the range to keep pieces closer to the center or edges
+        const randomX = Math.floor(Math.random() * (maxX - 100)) + 50; // Adjust as needed
+        const randomY = Math.floor(Math.random() * (maxY - 100)) + 50; // Adjust as needed
+        
+        puzzlePiece.style.left = `${randomX}px`;
+        puzzlePiece.style.top = `${randomY}px`;
+    });
+}
+
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
