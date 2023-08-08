@@ -5,7 +5,10 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="puzzle-board"></div>
+  <div id="puzzle-board" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <img src="https://i.imgur.com/4oYIM2J.png" draggable="true" ondragstart="drag(event)">
+    <!-- Add other image tags with different URLs for the remaining puzzle pieces -->
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
