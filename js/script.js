@@ -12,16 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
             puzzlePiece.addEventListener('mousedown', startDragging);
+            puzzlePiece.addEventListener('mouseup', stopDragging);
         });
     }
 
     function startDragging(event) {
         const puzzlePiece = event.target.closest('.puzzle-piece');
-        const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left;
-        const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top;
-
         puzzlePiece.style.cursor = 'grabbing';
         puzzlePiece.style.zIndex = 1;
+        const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left;
+        const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top;
 
         function moveAt(pageX, pageY) {
             puzzlePiece.style.left = pageX - shiftX + 'px';
@@ -32,39 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
             moveAt(event.pageX, event.pageY);
         }
 
-        function onMouseUp() {
+        document.addEventListener('mousemove', onMouseMove);
+
+        function stopDragging() {
             document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
             puzzlePiece.style.cursor = 'grab';
             puzzlePiece.style.zIndex = 0;
-            checkPuzzleCompletion();
         }
 
-        moveAt(event.pageX, event.pageY);
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    }
-
-    function checkPuzzleCompletion() {
-        let completedPieces = 0;
-        puzzlePieces.forEach(puzzlePiece => {
-            const rect1 = puzzlePiece.getBoundingClientRect();
-            const rect2 = puzzlePiece.dataset.target.getBoundingClientRect();
-            const overlapping = !(rect1.right < rect2.left ||
-                rect1.left > rect2.right ||
-                rect1.bottom < rect2.top ||
-                rect1.top > rect2.bottom);
-
-            if (overlapping) {
-                puzzlePiece.style.pointerEvents = 'none';
-                completedPieces++;
-            }
-        });
-
-        if (completedPieces === puzzlePieces.length) {
-            alert('Congratulations! Puzzle completed!');
-        }
+        puzzlePiece.addEventListener('mouseup', stopDragging);
     }
 
     // Add puzzle pieces to the board
