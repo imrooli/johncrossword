@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('mouseup', stopDragging);
     }
 
+    shuffleArray(puzzlePieces);
+
     // Add puzzle pieces to the board
     for (let i = 1; i <= 24; i++) {
         const puzzlePiece = document.createElement('div');
@@ -61,8 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         puzzlePieces.push(puzzlePiece);
     }
 
-    // Shuffle the order of puzzle pieces
-    shuffleArray(puzzlePieces);
     // Append the shuffled pieces back to the board
     puzzlePieces.forEach(puzzlePiece => puzzleBoard.appendChild(puzzlePiece));
 
