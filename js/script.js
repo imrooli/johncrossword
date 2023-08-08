@@ -11,15 +11,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.addEventListener('mousedown', startDragging);
-            puzzlePiece.addEventListener('mouseup', stopDragging);
+            puzzlePiece.addEventListener("pointerdown", handleDragStart);
+            puzzlePiece.addEventListener("pointerup", handleDragEnd);
+            puzzlePiece.addEventListener("pointermove", handleDrag);
         });
     }
 
-    function startDragging(event) {
+    function handleDragStart(event) {
         const puzzlePiece = event.target.closest('.puzzle-piece');
         puzzlePiece.style.cursor = 'grabbing';
         puzzlePiece.style.zIndex = 1;
+        puzzlePiece.setPointerCapture(event.pointerId);
+    }
+
+    function handleDrag(event) {
+        const puzzlePiece = event.target.closest('.puzzle-piece');
+        if (!puzzlePiece.hasPointerCapture(event.pointerId)) return;
+
         const shiftX = event.clientX - puzzlePiece.getBoundingClientRect().left;
         const shiftY = event.clientY - puzzlePiece.getBoundingClientRect().top;
 
@@ -28,19 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
             puzzlePiece.style.top = pageY - shiftY + 'px';
         }
 
-        function onMouseMove(event) {
-            moveAt(event.pageX, event.pageY);
-        }
+        moveAt(event.pageX, event.pageY);
+    }
 
-        document.addEventListener('mousemove', onMouseMove);
-
-        function stopDragging() {
-            document.removeEventListener('mousemove', onMouseMove);
-            puzzlePiece.style.cursor = 'grab';
-            puzzlePiece.style.zIndex = 0;
-        }
-
-        puzzlePiece.addEventListener('mouseup', stopDragging);
+    function handleDragEnd(event) {
+        const puzzlePiece = event.target.closest('.puzzle-piece');
+        puzzlePiece.style.cursor = 'grab';
+        puzzlePiece.style.zIndex = 0;
+        puzzlePiece.releasePointerCapture(event.pointerId);
     }
 
     // Add puzzle pieces to the board
