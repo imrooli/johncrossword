@@ -11,10 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.onclick = startDragging;
+            puzzlePiece.addEventListener('mousedown', startDragging);
         });
-        document.onmousemove = continueDragging;
-        document.onmouseup = stopDragging;
+        document.addEventListener('mousemove', continueDragging);
+        document.addEventListener('mouseup', stopDragging);
     }
 
     let draggingPiece = null;
@@ -23,19 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startDragging(event) {
         draggingPiece = event.target;
-        const puzzlePieceRect = draggingPiece.getBoundingClientRect();
-        offsetX = event.clientX - puzzlePieceRect.left;
-        offsetY = event.clientY - puzzlePieceRect.top;
+        offsetX = event.clientX - parseFloat(getComputedStyle(draggingPiece).left);
+        offsetY = event.clientY - parseFloat(getComputedStyle(draggingPiece).top);
         draggingPiece.style.cursor = 'grabbing';
         draggingPiece.style.zIndex = 1;
     }
 
     function continueDragging(event) {
         if (!draggingPiece) return;
-        const newX = event.clientX - offsetX;
-        const newY = event.clientY - offsetY;
-        draggingPiece.style.left = newX + 'px';
-        draggingPiece.style.top = newY + 'px';
+        draggingPiece.style.left = (event.clientX - offsetX) + 'px';
+        draggingPiece.style.top = (event.clientY - offsetY) + 'px';
     }
 
     function stopDragging() {
