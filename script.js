@@ -43,6 +43,12 @@ function createPuzzlePieces() {
     piece.style.top = Math.random() * (boardWidth - piece.offsetWidth) + "px";
 
     board.appendChild(piece);
+
+        // Add event listeners for dragging the puzzle pieces after creating them
+    piece.addEventListener("mousedown", handleDragStart);
+    piece.addEventListener("touchstart", handleDragStart, { passive: false });
+    piece.addEventListener("mouseup", handleDragEnd);
+    piece.addEventListener("touchend", handleDragEnd);
   });
 }
 
