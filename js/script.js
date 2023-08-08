@@ -9,23 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function shufflePiecesPositions() {
-        const puzzleBoardRect = puzzleBoard.getBoundingClientRect();
-        const boardWidth = puzzleBoardRect.width;
-        const boardHeight = puzzleBoardRect.height;
-        const centerX = boardWidth / 2;
-        const centerY = boardHeight / 2;
-        const maxOffsetX = centerX - puzzlePieces[0].offsetWidth / 2;
-        const maxOffsetY = centerY - puzzlePieces[0].offsetHeight / 2;
-
-        puzzlePieces.forEach(puzzlePiece => {
-            const randomOffsetX = Math.random() * maxOffsetX * 2 - maxOffsetX;
-            const randomOffsetY = Math.random() * maxOffsetY * 2 - maxOffsetY;
-            puzzlePiece.style.left = `${centerX + randomOffsetX}px`;
-            puzzlePiece.style.top = `${centerY + randomOffsetY}px`;
-        });
-    }
-
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
             puzzlePiece.addEventListener('mousedown', startDragging);
@@ -78,7 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
         puzzlePieces.push(puzzlePiece);
     }
 
+    // Shuffle the order of puzzle pieces
     shuffleArray(puzzlePieces);
+    // Append the shuffled pieces back to the board
+    puzzlePieces.forEach(puzzlePiece => puzzleBoard.appendChild(puzzlePiece));
+
     addEventListenersToPieces();
-    shufflePiecesPositions(); // Shuffle the initial positions of the puzzle pieces
 });
