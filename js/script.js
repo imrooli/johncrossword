@@ -43,14 +43,8 @@ function loadPuzzlePieces() {
 function createPuzzlePiece(piece, index) {
     const puzzlePiece = document.createElement("div");
     puzzlePiece.classList.add("puzzle-piece");
-    puzzlePiece.style.backgroundImage = `url('images/puzzle_pieces/${piece}')`;
-    puzzlePiece.style.zIndex = index + 1;
-    puzzlePiece.setAttribute("draggable", "true");
-    puzzlePiece.addEventListener("dragstart", dragStart);
-    puzzlePiece.addEventListener("dragover", dragOver);
-    puzzlePiece.addEventListener("drop", drop);
-    
-    // Get the image's natural width and height
+
+    // Create an image element for the puzzle piece
     const img = new Image();
     img.src = `images/puzzle_pieces/${piece}`;
     img.onload = function() {
@@ -58,17 +52,28 @@ function createPuzzlePiece(piece, index) {
         const aspectRatio = img.width / img.height;
 
         // Set the puzzle piece's width and height based on the aspect ratio
-        puzzlePiece.style.width = Math.min(100, img.width) + "px"; // Adjust the maximum width as needed
-        puzzlePiece.style.height = Math.min(100, img.height) + "px"; // Adjust the maximum height as needed
+        const maxWidth = 100; // Adjust the maximum width as needed
+        const maxHeight = 100; // Adjust the maximum height as needed
+        const width = Math.min(maxWidth, img.width);
+        const height = width / aspectRatio;
+        
+        // Set the puzzle piece's dimensions
+        puzzlePiece.style.width = width + "px";
+        puzzlePiece.style.height = height + "px";
 
-        // Set the object-fit property to 'cover' to maintain aspect ratio and fit the image
-        puzzlePiece.style.backgroundSize = "cover";
-        puzzlePiece.style.backgroundPosition = "center";
+        // Set the background image with correct size
+        puzzlePiece.style.backgroundImage = `url('${img.src}')`;
+        puzzlePiece.style.backgroundSize = `${width}px ${height}px`;
+
+        puzzlePiece.style.zIndex = index + 1;
+        puzzlePiece.setAttribute("draggable", "true");
+        puzzlePiece.addEventListener("dragstart", dragStart);
+        puzzlePiece.addEventListener("dragover", dragOver);
+        puzzlePiece.addEventListener("drop", drop);
     };
 
     return puzzlePiece;
 }
-
 // Function to shuffle an array (Fisher-Yates algorithm)
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
