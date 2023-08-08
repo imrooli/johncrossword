@@ -19,8 +19,6 @@ body {
 .puzzle-piece {
     cursor: grab;
     position: relative;
-    width: 100px; /* Adjust the size of each puzzle piece */
-    height: 100px; /* Adjust the size of each puzzle piece */
     margin: 5px;
 }
 
