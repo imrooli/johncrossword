@@ -44,14 +44,28 @@ function createPuzzlePiece(piece, index) {
     const puzzlePiece = document.createElement("div");
     puzzlePiece.classList.add("puzzle-piece");
     puzzlePiece.style.backgroundImage = `url('images/puzzle_pieces/${piece}')`;
-    puzzlePiece.style.backgroundSize = "cover";
-    puzzlePiece.style.backgroundPosition = "center";
-    puzzlePiece.style.backgroundRepeat = "no-repeat";
     puzzlePiece.style.zIndex = index + 1;
     puzzlePiece.setAttribute("draggable", "true");
     puzzlePiece.addEventListener("dragstart", dragStart);
     puzzlePiece.addEventListener("dragover", dragOver);
     puzzlePiece.addEventListener("drop", drop);
+    
+    // Get the image's natural width and height
+    const img = new Image();
+    img.src = `images/puzzle_pieces/${piece}`;
+    img.onload = function() {
+        // Calculate the aspect ratio
+        const aspectRatio = img.width / img.height;
+
+        // Set the puzzle piece's width and height based on the aspect ratio
+        puzzlePiece.style.width = Math.min(100, img.width) + "px"; // Adjust the maximum width as needed
+        puzzlePiece.style.height = Math.min(100, img.height) + "px"; // Adjust the maximum height as needed
+
+        // Set the object-fit property to 'cover' to maintain aspect ratio and fit the image
+        puzzlePiece.style.backgroundSize = "cover";
+        puzzlePiece.style.backgroundPosition = "center";
+    };
+
     return puzzlePiece;
 }
 
