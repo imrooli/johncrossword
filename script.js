@@ -46,19 +46,41 @@ async function createPuzzlePieces() {
   // Clear the puzzle board before creating new pieces
   board.innerHTML = "";
 
+  let totalWidth = 0;
+  let maxHeight = 0;
+
   for (const url of puzzlePieceUrls) {
     try {
       const { width, height } = await getImageDimensions(url);
+      totalWidth += width;
+      maxHeight = Math.max(maxHeight, height);
+    } catch (error) {
+      console.error(`Error loading image from ${url}:`, error);
+    }
+  }
+
+  // Calculate the scaling factor to fit the images within the board
+  const scale = Math.min(board.offsetWidth / totalWidth, board.offsetHeight / maxHeight);
+
+  let leftPosition = 0;
+
+  for (const url of puzzlePieceUrls) {
+    try {
+      const { width, height } = await getImageDimensions(url);
+      const scaledWidth = width * scale;
+      const scaledHeight = height * scale;
 
       const piece = document.createElement("div");
       piece.className = "puzzle-piece";
       piece.style.backgroundImage = `url("${url}")`; // Use the background-image property
-      piece.style.width = `${width}px`;
-      piece.style.height = `${height}px`;
-      piece.style.left = Math.random() * (board.offsetWidth - width) + "px"; // Random initial position
-      piece.style.top = Math.random() * (board.offsetHeight - height) + "px";
+      piece.style.width = `${scaledWidth}px`;
+      piece.style.height = `${scaledHeight}px`;
+      piece.style.left = leftPosition + "px";
+      piece.style.top = Math.random() * (board.offsetHeight - scaledHeight) + "px";
 
       board.appendChild(piece);
+      
+      leftPosition += scaledWidth;
 
       // Add event listeners for dragging the puzzle pieces after creating them
       piece.addEventListener("mousedown", handleDragStart);
