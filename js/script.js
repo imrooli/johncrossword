@@ -74,10 +74,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const puzzleImage = new Image();
         puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
         puzzleImage.onload = () => {
-            puzzlePiece.style.width = puzzleImage.width + 'px';
-            puzzlePiece.style.height = puzzleImage.height + 'px';
+            const originalWidth = puzzleImage.width;
+            const originalHeight = puzzleImage.height;
+            puzzlePiece.style.width = originalWidth + 'px';
+            puzzlePiece.style.height = originalHeight + 'px';
         };
         puzzlePiece.appendChild(puzzleImage);
-        puzzlePiece.style.order = i;
         puzzlePiece.dataset.target = `target_${i}`;
         puzzleBoard.appendChild(puzzlePiece);
+        puzzlePieces.push(puzzlePiece);
+    }
+
+    shuffleArray(puzzlePieces);
+    addEventListenersToPieces();
+});
