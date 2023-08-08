@@ -11,44 +11,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.addEventListener('mousedown', startDragging);
+            puzzlePiece.addEventListener('pointerdown', startDragging);
         });
     }
 
-  function startDragging(event) {
-    const puzzlePiece = event.target.closest('.puzzle-piece');
+    function startDragging(event) {
+        const puzzlePiece = event.target.closest('.puzzle-piece');
+        const initialX = event.clientX;
+        const initialY = event.clientY;
+        const puzzlePieceRect = puzzlePiece.getBoundingClientRect();
+        const offsetX = initialX - puzzlePieceRect.left;
+        const offsetY = initialY - puzzlePieceRect.top;
 
-    const initialX = event.clientX;
-    const initialY = event.clientY;
+        puzzlePiece.style.cursor = 'grabbing';
+        puzzlePiece.style.zIndex = 1;
 
-    const puzzlePieceRect = puzzlePiece.getBoundingClientRect();
-    const offsetX = initialX - puzzlePieceRect.left;
-    const offsetY = initialY - puzzlePieceRect.top;
+        function onMouseMove(event) {
+            const newX = event.clientX - offsetX;
+            const newY = event.clientY - offsetY;
 
-    puzzlePiece.style.cursor = 'grabbing';
-    puzzlePiece.style.zIndex = 1;
+            puzzlePiece.style.left = newX + 'px';
+            puzzlePiece.style.top = newY + 'px';
+        }
 
-    function onMouseMove(event) {
-        const newX = event.clientX - offsetX;
-        const newY = event.clientY - offsetY;
+        function stopDragging() {
+            document.removeEventListener('pointermove', onMouseMove);
+            puzzlePiece.style.cursor = 'grab';
+            puzzlePiece.style.zIndex = 0;
+            document.removeEventListener('pointerup', stopDragging);
+        }
 
-        puzzlePiece.style.left = newX + 'px';
-        puzzlePiece.style.top = newY + 'px';
+        document.addEventListener('pointermove', onMouseMove);
+        document.addEventListener('pointerup', stopDragging);
     }
-
-    function stopDragging() {
-        document.removeEventListener('mousemove', onMouseMove);
-        puzzlePiece.style.cursor = 'grab';
-        puzzlePiece.style.zIndex = 0;
-        document.removeEventListener('mouseup', stopDragging);
-    }
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', stopDragging);
-}
-
-
-
 
     // Add puzzle pieces to the board
     for (let i = 1; i <= 24; i++) {
