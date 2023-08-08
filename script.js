@@ -75,7 +75,7 @@ async function createPuzzlePieces() {
   }
 
   // Calculate the scaling factor to fit the images within the board
-  const scale = Math.min(board.offsetWidth / totalWidth, board.offsetHeight / maxHeight);
+  const scale = Math.min(board.offsetWidth / (totalWidth * 2), board.offsetHeight / (maxHeight * 2));
 
   let leftPosition = 0;
 
