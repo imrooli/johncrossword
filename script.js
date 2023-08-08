@@ -75,28 +75,30 @@ async function createPuzzlePieces() {
   }
 
   // Calculate the scaling factor to fit the images within the board
-  const scale = 1; // Each puzzle piece will retain its original size
+  const scale = Math.min(board.offsetWidth / totalWidth, board.offsetHeight / maxHeight);
 
   let leftPosition = 0;
 
   for (const url of puzzlePieceUrls) {
     try {
       const { width, height } = await getImageDimensions(url);
+      const scaledWidth = width * scale;
+      const scaledHeight = height * scale;
 
       const piece = document.createElement("img");
       piece.src = url;
       piece.className = "puzzle-piece";
-      piece.style.width = `${width}px`;
-      piece.style.height = `${height}px`;
+      piece.style.width = `${scaledWidth}px`;
+      piece.style.height = `${scaledHeight}px`;
       piece.style.position = "absolute";
       piece.style.left = leftPosition + "px";
-      piece.style.top = Math.random() * (board.offsetHeight - height) + "px";
+      piece.style.top = Math.random() * (board.offsetHeight - scaledHeight) + "px";
       piece.draggable = true;
       piece.addEventListener("dragstart", drag);
 
       board.appendChild(piece);
 
-      leftPosition += width;
+      leftPosition += scaledWidth;
     } catch (error) {
       console.error(`Error loading image from ${url}:`, error);
     }
