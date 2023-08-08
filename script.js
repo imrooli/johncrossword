@@ -33,10 +33,12 @@ function createPuzzlePieces() {
   // Clear the puzzle board before creating new pieces
   board.innerHTML = "";
 
-  puzzlePieceUrls.forEach((url, index) => {
+  const uniqueUrls = new Set(puzzlePieceUrls); // Convert array to a set to remove duplicates
+
+  uniqueUrls.forEach((url) => {
     const piece = document.createElement("div");
     piece.className = "puzzle-piece";
-    piece.style.backgroundImage = `url(${url})`;
+    piece.style.backgroundImage = `url("${url}")`; // Use the background-image property
     piece.style.left = Math.random() * 500 + "px"; // Random initial position
     piece.style.top = Math.random() * 300 + "px";
 
