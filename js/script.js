@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const puzzleBoard = document.getElementById('puzzle-board');
+    const puzzlePieces = [];
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -9,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addEventListenersToPieces() {
-        const puzzlePieces = document.querySelectorAll('.puzzle-piece');
         puzzlePieces.forEach(puzzlePiece => {
             puzzlePiece.addEventListener('mousedown', startDragging);
+            puzzlePiece.addEventListener('dragstart', () => false);
         });
     }
 
@@ -36,12 +37,34 @@ document.addEventListener('DOMContentLoaded', () => {
             puzzlePiece.removeEventListener('mouseup', onMouseUp);
             puzzlePiece.style.cursor = 'grab';
             puzzlePiece.style.zIndex = 0;
+            checkPuzzleCompletion();
         }
 
         moveAt(event.pageX, event.pageY);
 
         document.addEventListener('mousemove', onMouseMove);
         puzzlePiece.addEventListener('mouseup', onMouseUp);
+    }
+
+    function checkPuzzleCompletion() {
+        let completedPieces = 0;
+        puzzlePieces.forEach(puzzlePiece => {
+            const rect1 = puzzlePiece.getBoundingClientRect();
+            const rect2 = puzzlePiece.dataset.target.getBoundingClientRect();
+            const overlapping = !(rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom);
+
+            if (overlapping) {
+                puzzlePiece.style.pointerEvents = 'none';
+                completedPieces++;
+            }
+        });
+
+        if (completedPieces === puzzlePieces.length) {
+            alert('Congratulations! Puzzle completed!');
+        }
     }
 
     // Add puzzle pieces to the board
@@ -51,9 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const puzzleImage = new Image();
         puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
         puzzlePiece.appendChild(puzzleImage);
+        puzzlePiece.style.order = i;
+        puzzlePiece.dataset.target = `target_${i}`;
         puzzleBoard.appendChild(puzzlePiece);
+        puzzlePieces.push(puzzlePiece);
     }
 
-    shuffleArray(puzzleBoard.children);
+    shuffleArray(puzzlePieces);
     addEventListenersToPieces();
 });
