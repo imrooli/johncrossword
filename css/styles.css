@@ -5,7 +5,7 @@ body {
 
 #puzzle-holder {
     width: 200px; /* Adjust the size of the puzzle holder */
-    height: 100vh; /* Adjust the height of the puzzle holder */
+    min-height: 100vh; /* Adjust the height of the puzzle holder */
     border: 2px solid #ccc;
     padding: 10px;
     background-color: #f0f0f0;
