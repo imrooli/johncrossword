@@ -12,29 +12,34 @@ document.addEventListener('DOMContentLoaded', () => {
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
             puzzlePiece.addEventListener('mousedown', startDragging);
-            puzzlePiece.addEventListener('mouseup', stopDragging);
         });
     }
 
     function startDragging(event) {
         const puzzlePiece = event.target;
+        const initialX = event.clientX - puzzlePiece.getBoundingClientRect().left;
+        const initialY = event.clientY - puzzlePiece.getBoundingClientRect().top;
+
         puzzlePiece.style.cursor = 'grabbing';
         puzzlePiece.style.zIndex = 1;
 
         function onMouseMove(event) {
-            puzzlePiece.style.left = event.clientX - puzzlePiece.offsetWidth / 2 + 'px';
-            puzzlePiece.style.top = event.clientY - puzzlePiece.offsetHeight / 2 + 'px';
-        }
+            const newX = event.clientX - initialX;
+            const newY = event.clientY - initialY;
 
-        document.addEventListener('mousemove', onMouseMove);
+            puzzlePiece.style.left = newX + 'px';
+            puzzlePiece.style.top = newY + 'px';
+        }
 
         function stopDragging() {
             document.removeEventListener('mousemove', onMouseMove);
             puzzlePiece.style.cursor = 'grab';
             puzzlePiece.style.zIndex = 0;
+            document.removeEventListener('mouseup', stopDragging);
         }
 
-        puzzlePiece.addEventListener('mouseup', stopDragging);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', stopDragging);
     }
 
     // Add puzzle pieces to the board
