@@ -2,38 +2,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const puzzleBoard = document.getElementById('puzzle-board');
     const puzzlePieces = [];
 
-    function addEventListenersToPieces() {
-        puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.addEventListener('mousedown', startDragging);
-        });
-        document.addEventListener('mousemove', continueDragging);
-        document.addEventListener('mouseup', stopDragging);
+    function allowDrop(event) {
+        event.preventDefault();
     }
 
-    let draggingPiece = null;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    function startDragging(event) {
-        draggingPiece = event.target;
-        offsetX = event.clientX - parseFloat(getComputedStyle(draggingPiece).left);
-        offsetY = event.clientY - parseFloat(getComputedStyle(draggingPiece).top);
-        draggingPiece.style.zIndex = 1;
-        event.preventDefault(); // Prevent selection while dragging
+    function drag(event) {
+        const draggedImage = event.target;
+        offsetX = event.clientX - draggedImage.getBoundingClientRect().left;
+        offsetY = event.clientY - draggedImage.getBoundingClientRect().top;
+        draggedImage.style.cursor = "grabbing";
+        draggedPiece = draggedImage;
     }
 
-    function continueDragging(event) {
-        if (!draggingPiece) return;
-        const newX = event.clientX - offsetX;
-        const newY = event.clientY - offsetY;
-        draggingPiece.style.transform = `translate(${newX}px, ${newY}px)`;
-    }
-
-    function stopDragging() {
-        if (!draggingPiece) return;
-        draggingPiece.style.zIndex = 0;
-        draggingPiece.style.transform = 'none';
-        draggingPiece = null;
+    function drop(event) {
+        event.preventDefault();
+        if (draggedPiece) {
+            const x = event.clientX - puzzleBoard.getBoundingClientRect().left - offsetX;
+            const y = event.clientY - puzzleBoard.getBoundingClientRect().top - offsetY;
+            draggedPiece.style.left = `${x}px`;
+            draggedPiece.style.top = `${y}px`;
+            draggedPiece.style.cursor = "grab";
+            draggedPiece = null;
+        }
     }
 
     // Add puzzle pieces to the board
@@ -42,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
         puzzlePiece.classList.add('puzzle-piece');
         const puzzleImage = new Image();
         puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
+        puzzleImage.draggable = true;
+        puzzleImage.addEventListener('dragstart', drag);
         puzzleImage.onload = () => {
             const originalWidth = puzzleImage.width;
             const originalHeight = puzzleImage.height;
@@ -50,9 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
             puzzlePiece.style.width = originalWidth + 'px';
             puzzlePiece.style.height = originalHeight + 'px';
         };
+        puzzlePiece.appendChild(puzzleImage);
         puzzleBoard.appendChild(puzzlePiece);
         puzzlePieces.push(puzzlePiece);
     }
-
-    addEventListenersToPieces();
 });
