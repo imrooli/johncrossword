@@ -18,19 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
         draggingPiece = event.target;
         offsetX = event.clientX - parseFloat(getComputedStyle(draggingPiece).left);
         offsetY = event.clientY - parseFloat(getComputedStyle(draggingPiece).top);
-        draggingPiece.style.cursor = 'grabbing';
+        draggingPiece.style.zIndex = 1;
         event.preventDefault(); // Prevent selection while dragging
     }
 
     function continueDragging(event) {
         if (!draggingPiece) return;
-        draggingPiece.style.left = (event.clientX - offsetX) + 'px';
-        draggingPiece.style.top = (event.clientY - offsetY) + 'px';
+        const newX = event.clientX - offsetX;
+        const newY = event.clientY - offsetY;
+        draggingPiece.style.transform = `translate(${newX}px, ${newY}px)`;
     }
 
     function stopDragging() {
         if (!draggingPiece) return;
-        draggingPiece.style.cursor = 'grab';
+        draggingPiece.style.zIndex = 0;
+        draggingPiece.style.transform = 'none';
         draggingPiece = null;
     }
 
