@@ -37,12 +37,15 @@ function createPuzzlePieces() {
     piece.style.left = Math.random() * 500 + "px"; // Random initial position
     piece.style.top = Math.random() * 300 + "px";
 
-    // Add event listeners for dragging the puzzle piece
+    board.appendChild(piece);
+  });
+
+  // Add event listeners for dragging the puzzle pieces after creating them
+  const puzzlePieces = document.querySelectorAll(".puzzle-piece");
+  puzzlePieces.forEach((piece) => {
     piece.addEventListener("pointerdown", handleDragStart);
     piece.addEventListener("pointerup", handleDragEnd);
     piece.addEventListener("pointermove", handleDrag);
-
-    board.appendChild(piece);
   });
 }
 
