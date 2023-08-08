@@ -19,6 +19,5 @@ body {
 .puzzle-piece {
     cursor: grab;
     position: relative;
-    user-drag: none;
     user-select: none;
 }
