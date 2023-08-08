@@ -9,6 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function shufflePiecesPositions() {
+        puzzlePieces.forEach(puzzlePiece => {
+            const maxX = puzzleBoard.offsetWidth - puzzlePiece.offsetWidth;
+            const maxY = puzzleBoard.offsetHeight - puzzlePiece.offsetHeight;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            puzzlePiece.style.left = `${randomX}px`;
+            puzzlePiece.style.top = `${randomY}px`;
+        });
+    }
+
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
             puzzlePiece.addEventListener('mousedown', startDragging);
@@ -63,4 +74,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     shuffleArray(puzzlePieces);
     addEventListenersToPieces();
+    shufflePiecesPositions(); // Shuffle the initial positions of the puzzle pieces
 });
