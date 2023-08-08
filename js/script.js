@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEventListenersToPieces() {
         puzzlePieces.forEach(puzzlePiece => {
-            puzzlePiece.addEventListener('pointerdown', startDragging);
+            puzzlePiece.addEventListener('mousedown', startDragging);
         });
     }
 
@@ -33,14 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function stopDragging() {
-            document.removeEventListener('pointermove', onMouseMove);
+            document.removeEventListener('mousemove', onMouseMove);
             puzzlePiece.style.cursor = 'grab';
             puzzlePiece.style.zIndex = 0;
-            document.removeEventListener('pointerup', stopDragging);
+            document.removeEventListener('mouseup', stopDragging);
         }
 
-        document.addEventListener('pointermove', onMouseMove);
-        document.addEventListener('pointerup', stopDragging);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', stopDragging);
     }
 
     // Add puzzle pieces to the board
