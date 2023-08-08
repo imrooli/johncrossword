@@ -18,6 +18,6 @@ body {
 
 .puzzle-piece {
     cursor: grab;
-    position: relative;
+    position: absolute;
     user-select: none;
 }
