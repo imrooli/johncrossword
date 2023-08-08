@@ -17,10 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startDragging(event) {
     const puzzlePiece = event.target.closest('.puzzle-piece');
-    const boundingRect = puzzlePiece.getBoundingClientRect();
 
-    const offsetX = event.clientX - boundingRect.left;
-    const offsetY = event.clientY - boundingRect.top;
+    const initialX = event.clientX;
+    const initialY = event.clientY;
+
+    const puzzlePieceRect = puzzlePiece.getBoundingClientRect();
+    const offsetX = initialX - puzzlePieceRect.left;
+    const offsetY = initialY - puzzlePieceRect.top;
 
     puzzlePiece.style.cursor = 'grabbing';
     puzzlePiece.style.zIndex = 1;
@@ -43,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', stopDragging);
 }
+
 
 
 
