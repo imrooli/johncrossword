@@ -38,8 +38,9 @@ function createPuzzlePieces() {
     piece.style.top = Math.random() * 300 + "px";
 
     // Add event listeners for dragging the puzzle piece
-    piece.addEventListener("mousedown", handleDragStart);
-    piece.addEventListener("mouseup", handleDragEnd);
+    piece.addEventListener("pointerdown", handleDragStart);
+    piece.addEventListener("pointerup", handleDragEnd);
+    piece.addEventListener("pointermove", handleDrag);
 
     board.appendChild(piece);
   });
@@ -60,8 +61,6 @@ function handleDragEnd(event) {
   draggedPiece = null;
   event.target.style.cursor = "grab";
 }
-
-document.addEventListener("mousemove", handleDrag);
 
 function handleDrag(event) {
   if (draggedPiece) {
