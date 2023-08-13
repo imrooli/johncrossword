@@ -49,21 +49,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
- for (let i = 1; i <= 24; i++) {
-        const puzzlePiece = document.createElement('div');
-        puzzlePiece.classList.add('puzzle-piece');
-        const puzzleImage = new Image();
-        puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
-        puzzleImage.onload = () => {
-            const originalWidth = puzzleImage.width;
-            const originalHeight = puzzleImage.height;
-            puzzlePiece.style.width = originalWidth + 'px';
-            puzzlePiece.style.height = originalHeight + 'px';
-        };
-        puzzlePiece.appendChild(puzzleImage);
-        puzzlePiece.dataset.target = `target_${i}`;
-        puzzlePieces.push(puzzlePiece);
-    }
+for (let i = 1; i <= 20; i++) {
+    const puzzlePiece = document.createElement('div');
+    puzzlePiece.classList.add('puzzle-piece');
+    const puzzleImage = new Image();
+    puzzleImage.src = `images/puzzle_pieces/puzzle_${i}.png`;
+    puzzleImage.onload = () => {
+        const originalWidth = puzzleImage.width;
+        const originalHeight = puzzleImage.height;
+
+        // Reduce the size by 50%
+        const newWidth = originalWidth * 0.5;
+        const newHeight = originalHeight * 0.5;
+
+        puzzlePiece.style.width = newWidth + 'px';
+        puzzlePiece.style.height = newHeight + 'px';
+    };
+    puzzlePiece.appendChild(puzzleImage);
+    puzzlePiece.dataset.target = `target_${i}`;
+    puzzlePieces.push(puzzlePiece);
+}
 
     // Shuffle the order of puzzle pieces
     shuffleArray(puzzlePieces);
